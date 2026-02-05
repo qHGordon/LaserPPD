@@ -1,0 +1,111 @@
+{
+    "maxLevel": 10,
+    "descript": "",
+    "gameLevelSetting": [
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 2,
+            "presetPicName": "D-001",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 2,
+            "presetPicName": "D-002",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 3,
+            "presetPicName": "D-003",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 3,
+            "presetPicName": "D-004",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 4,
+            "presetPicName": "D-005",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 4,
+            "presetPicName": "D-006",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 5,
+            "presetPicName": "D-007",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 5,
+            "presetPicName": "D-008",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 6,
+            "presetPicName": "D-009",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 6,
+            "presetPicName": "D-010",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 6,
+            "presetPicName": "D-010",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 6,
+            "presetPicName": "D-010",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 6,
+            "presetPicName": "D-010",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 6,
+            "presetPicName": "D-010",
+            "animInfoName": ""
+        },
+        {
+            "gameTime": 120,
+            "life": 4,
+            "targetPoint": 6,
+            "presetPicName": "D-010",
+            "animInfoName": ""
+        }
+    ]
+}
