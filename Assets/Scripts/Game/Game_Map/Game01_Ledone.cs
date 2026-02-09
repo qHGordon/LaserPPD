@@ -212,7 +212,7 @@ FjData.g_Fj[0].Life--;
 #endif
 
                             Game_Map01.instance.protectTime = 3f;
-                            Debug.LogError("��Ѫ���꣺"+ pos_group[i].x+"  "+ pos_group[i].y);
+                            Debug.LogError("¿ÛÑª×ø±ê£º"+ pos_group[i].x+"  "+ pos_group[i].y);
                             GameLeiSheBase.gamePoint[i].bindCnt = 4;
                             MusicManager.instance.Play_Fails();
                         }
