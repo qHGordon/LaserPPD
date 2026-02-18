@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -95,6 +95,11 @@ public class SettingInGame : MonoBehaviour {
 	}
 	public void OnClick_Next()
 	{
+        if (SettingInGameRegistry.CurrentTarget != null)
+        {
+            SettingInGameRegistry.CurrentTarget.OnSettingNextLevel();
+            return;
+        }
         if (Set.setVal.GameChoose == 0)
         {
 
@@ -131,6 +136,11 @@ public class SettingInGame : MonoBehaviour {
         }
 	public void OnClick_Show()
 	{
+        if (SettingInGameRegistry.CurrentTarget != null)
+        {
+            SettingInGameRegistry.CurrentTarget.TogglePresetPicShow();
+            return;
+        }
         if (Set.setVal.GameChoose==0)
         {
             if (!Game00_Main.instance.presetPic_Layer.transform.parent.gameObject.activeSelf)

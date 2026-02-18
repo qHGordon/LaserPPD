@@ -1,7 +1,7 @@
 using System;
 
 /// <summary>
-/// 硬件协议接口
+/// [Core.Hardware] 硬件协议接口
 /// 定义硬件通信的核心方法，用于解耦硬件通信层
 /// </summary>
 public interface IHardwareProtocol

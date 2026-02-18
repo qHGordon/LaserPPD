@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -142,6 +142,7 @@ public struct GameSet
     public int WallNum_Height;
 }
 
+/// <summary>[Core.Config] 全局配置与游戏设置。</summary>
 public class Set
 {
     //----------------------------

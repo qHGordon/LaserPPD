@@ -1,8 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Game_Map00 : MonoBehaviour
+/// <summary>[Game00] 游戏地图控制器，实现 ILedMapCallback 供 LedAnim_Struts 解耦调用。</summary>
+public class Game_Map00 : MonoBehaviour, ILedMapCallback
 {
 
 

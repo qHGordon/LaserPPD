@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// YDGZ硬件协议实现类
-/// 封装 CmdIO_YDGZ 的静态方法，实现 IHardwareProtocol 接口
+/// [Core.Hardware] YDGZ 硬件协议实现类，封装 CmdIO_YDGZ 的静态方法，实现 IHardwareProtocol 接口。
 /// </summary>
 public class YDGZProtocol : IHardwareProtocol
 {

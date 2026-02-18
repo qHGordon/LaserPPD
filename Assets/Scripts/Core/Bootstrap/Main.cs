@@ -1,4 +1,4 @@
-﻿
+
 #define TEST_IN_WINDOW
 
 using System.Collections;
@@ -41,6 +41,7 @@ enum en_LoadStatue
 
 
 
+/// <summary>[Core.Bootstrap] 主流程控制器，负责场景切换、游戏加载与全局状态。</summary>
 public class Main : MonoBehaviour
 {
     // 分辨率设置

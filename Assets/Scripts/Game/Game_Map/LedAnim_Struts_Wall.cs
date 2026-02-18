@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,7 +55,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
     public Vector2[] pos_Now = new Vector2[4];
     public Vector2[] pos_Now1 = new Vector2[25];//5x5先用着
 
-    Map_WallLED ledAnim;
+    ILedMapCallback ledAnim;
 
     public bool isTank = false;
 
@@ -260,7 +260,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
         {
             if (bool_X_Pos[i])
             {
-                Game_Map00.instance.ChangeLed_Sta((int)X_Pos[i].x, (int)X_Pos[i].y, enPointSta.Target);
+                ledAnim.ChangeLed_Sta((int)X_Pos[i].x, (int)X_Pos[i].y, enPointSta.Target);
 
             }
             if (X_Pos[i].y <= 1 || X_Pos[i].y >= Set.setVal.Height - 2)
@@ -1499,7 +1499,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
             {
                 Game06_List0[player0_tarage_Now] = new Vector2(x, y);
 
-                Game_Map00.instance.ChangeLed_Sta(x, y, enPointSta.Target);
+                ledAnim.ChangeLed_Sta(x, y, enPointSta.Target);
                 player0_tarage_Now++;
                 cntX--;
             }
@@ -1515,7 +1515,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
             if (GameLedControl.gamePoint[pointID].statue == enPointSta.None)
             {
                 Game06_List1[player0_tarage_Now] = new Vector2(x, y);
-                Game_Map00.instance.ChangeLed_Sta(x, y, enPointSta.Target);
+                ledAnim.ChangeLed_Sta(x, y, enPointSta.Target);
                 cntX--;
                 player1_tarage_Now++;
             }
@@ -1531,7 +1531,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
         //Debug.LogError(x0_06 + "    " + y0_06+"   "+ startx +"   "+ Set.setVal.Height);
         if (x0_06 >= startx && y0_06 >= Set.setVal.Height - 1)
         {
-            Game_Map00.instance.isClearAll = true;
+            ledAnim.isClearAll = true;
             return true;
         }
         for (int i = 0; i < startx - 1; i++)
@@ -1543,14 +1543,14 @@ public class LedAnim_Struts_Wall : MonoBehaviour
                 return false;
             }
         }
-        Game_Map00.instance.isClearAll = true;
+        ledAnim.isClearAll = true;
         return true;
     }
     bool IsGamePass_06_1()
     {
         if (x1_06 >= Set.setVal.Width - 1 && y1_06 >= Set.setVal.Height - 1)
         {
-            Game_Map00.instance.isClearAll = true;
+            ledAnim.isClearAll = true;
             return true;
         }
         for (int i = startx; i < Set.setVal.Width - 1; i++)
@@ -1563,7 +1563,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
             }
         }
 
-        Game_Map00.instance.isClearAll = true;
+        ledAnim.isClearAll = true;
         return true;
     }
 
@@ -1583,7 +1583,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
                 }
                 else
                 {
-                    Game_Map00.instance.isClearAll = true;
+                    ledAnim.isClearAll = true;
                     return;
                 }
 
@@ -1636,7 +1636,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
                     picID = XX + Set.setVal.Width * YY;
                     pointID = Framebuffer.tab_Mapping[picID];
 
-                    Game_Map00.instance.ChangeLed_Sta(XX, YY, enPointSta.Target);
+                    ledAnim.ChangeLed_Sta(XX, YY, enPointSta.Target);
 
                     //    GameLedControl.gamePoint[pointID].statue = enPointSta.Target;
                     break;
@@ -1665,7 +1665,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
                         if (GameLedControl.gamePoint[pointID].statue == enPointSta.None)
                         {
 
-                            Game_Map00.instance.ChangeLed_Sta(i, k, enPointSta.Target);
+                            ledAnim.ChangeLed_Sta(i, k, enPointSta.Target);
                             change--;
 
                         }
@@ -1778,7 +1778,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
                         if (GameLedControl.gamePoint[pointID].statue == enPointSta.None)
                         {
 
-                            Game_Map00.instance.ChangeLed_Sta(i, k, enPointSta.Target);
+                            ledAnim.ChangeLed_Sta(i, k, enPointSta.Target);
                             change--;
 
                         }
@@ -1804,19 +1804,19 @@ public class LedAnim_Struts_Wall : MonoBehaviour
         //    if (Game06_List1[i].x >= 0)
         //    {
 
-        //        Game_Map00.instance.ChangeLed_Sta((int)Game06_List1[i].x, (int)Game06_List1[i].y, enPointSta.Target);
+        //        ledAnim.ChangeLed_Sta((int)Game06_List1[i].x, (int)Game06_List1[i].y, enPointSta.Target);
 
         //    }
         //    if (Game06_List0[i].x >= 0)
         //    {
         //        Debug.LogError(Game06_List0[i]);
-        //           Game_Map00.instance.ChangeLed_Sta((int)Game06_List0[i].x, (int)Game06_List0[i].y, enPointSta.Target);
+        //           ledAnim.ChangeLed_Sta((int)Game06_List0[i].x, (int)Game06_List0[i].y, enPointSta.Target);
 
         //    }
         //}
 
     }
-    public void Init(bool _isLeft, Map_WallLED _ledAnim)
+    public void Init(bool _isLeft, ILedMapCallback _ledAnim)
     {
         isTank = false;
         ledAnim = _ledAnim;
@@ -2300,7 +2300,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
         pointID = Framebuffer.tab_Mapping[picID];
         if (GameLedControl.gamePoint[pointID].statue == enPointSta.Target)
         {
-            Game_Map00.instance.tarageNum--;
+            ledAnim.tarageNum--;
         }
         GameLedControl.gamePoint[0].statue = enPointSta.Die;
         FindTarage();
@@ -2320,7 +2320,7 @@ public class LedAnim_Struts_Wall : MonoBehaviour
             pointID = Framebuffer.tab_Mapping[picID];
             if (GameLedControl.gamePoint[pointID].statue == enPointSta.Target)
             {
-                Game_Map00.instance.tarageNum--;
+                ledAnim.tarageNum--;
             }
 
             GameLedControl.gamePoint[pointID].statue = enPointSta.Die;

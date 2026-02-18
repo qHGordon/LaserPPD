@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -23,9 +23,11 @@ public class LedEnableSet
     public byte[] ledEnableTab;
 }
 
+/// <summary>[Core.Display] LED 显示缓冲，管理逻辑坐标与硬件点位映射，下发颜色到 LED 硬件。</summary>
 public class Framebuffer
 {
     public static LED[] led = new LED[Main.MAX_LED];
+    /// <summary>逻辑坐标 (x,y) 到硬件点位索引的映射，picid = x + Width * y</summary>
     public static int[] tab_Mapping = new int[Main.MAX_LED];
     public static int[] tab_PosMapping = new int[Main.MAX_LED];
     public static byte[,] ledMask = new byte[PresetPic.PIC_WIDTH, PresetPic.PIC_HEIGHT];
@@ -592,6 +594,7 @@ public class Framebuffer
 
 
 
+    /// <summary>逻辑坐标 (列 x, 行 y) 转硬件点位索引，picid = x + Width * y</summary>
     public static int MappingId(int x, int y)
     {
         int id = y * Set.setVal.Width + x;

@@ -1,8 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>[Core.Hardware] 镭射硬件串口通信协议，负责 LED 指令下发与连接检测。</summary>
 public class CmdIO_YDGZ
 {
 #if IO_YDGZ

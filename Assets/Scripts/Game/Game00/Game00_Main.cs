@@ -48,8 +48,9 @@ public enum en_IoGameSta
 
 /// <summary>
 /// Game00 主逻辑控制器，负责状态机、计分、墙灯交互与 UI 驱动。
+/// 实现 ISettingInGameTarget 供 SettingInGame 解耦调用。
 /// </summary>
-public class Game00_Main : MonoBehaviour
+public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 {
     public Game00_GameUIComm gameUIComm;
     public Game00_GameUI gameUI_Single;
@@ -142,7 +143,35 @@ public class Game00_Main : MonoBehaviour
         main = mainn;
         isClearTarage = true;
         gameUI_MulitPlayer.Awake0();
-
+        SettingInGameRegistry.CurrentTarget = this;
+    }
+    void OnDisable()
+    {
+        if (SettingInGameRegistry.CurrentTarget == (ISettingInGameTarget)this)
+            SettingInGameRegistry.CurrentTarget = null;
+    }
+    public GameObject PresetPicLayerParent => presetPic_Layer != null ? presetPic_Layer.transform.parent.gameObject : null;
+    public void OnSettingNextLevel()
+    {
+        if (Main.MapIndex == 7)
+        {
+            Game14_Main.instance.OnClickNextLevel();
+            return;
+        }
+        Game_Map00.instance.TarageNum_now = 0;
+        if (Main.MapID == 25)
+            Game_Map00.instance.Init_NewMap_01_next();
+        else if (Main.MapID == 1)
+            Game_Map00.instance.Init_NewMap_02_Next();
+        else
+            Game_Map00.instance.isClearAll = true;
+    }
+    public void TogglePresetPicShow()
+    {
+        if (presetPic_Layer == null) return;
+        var go = presetPic_Layer.transform.parent.gameObject;
+        go.SetActive(!go.activeSelf);
+        presetPic_Layer.transform.localRotation = Quaternion.identity;
     }
 
     readonly int[] tab_PlayerId_Left = { 0, 1 };

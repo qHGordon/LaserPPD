@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+/// <summary>[Game01] 镭射激光单点对象，负责运动、渲染与踩点碰撞检测。</summary>
 public class Game01_Ledone : MonoBehaviour
 {
     public static int rxKeyStartId;
-    public int x;
-    public int y;
+    public int x;  // 列坐标 (column)
+    public int y;  // 行坐标 (row)，y=0 为底部，y=Height-1 为顶部
     public int donw_Y = 0;
     int dir;
-    public List<Vector2Int> pos_group;
+    public List<Vector2Int> pos_group;  // 每个元素 (x,y)：列 x, 行 y
     float runtime = 0;
     public float stayTime = 0;
     public float MaxstayTime = 0;

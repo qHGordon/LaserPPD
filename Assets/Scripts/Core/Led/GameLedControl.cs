@@ -1,9 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 统一的游戏点结构体
+/// [Core.Led] 统一的游戏点结构体
 /// 包含所有游戏点的通用字段和特定字段，用于统一 GameLedControl 和 GameLeiSheBase 的数据结构
 /// </summary>
 public struct GamePoint
@@ -102,6 +102,7 @@ public struct GamePoint
     }
 }
 
+/// <summary>[Core.Led] LED 点阵控制，管理 gamePoint 状态与 Framebuffer 同步。</summary>
 public class GameLedControl
 {
     public static GamePoint[] gamePoint = new GamePoint[Main.MAX_LED];

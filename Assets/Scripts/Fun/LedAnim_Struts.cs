@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -291,7 +291,7 @@ public class LedAnim_Struts : MonoBehaviour
         {
             if (bool_X_Pos[i])
             {
-                Game_Map00.instance.ChangeLed_Sta((int)X_Pos[i].x, (int)X_Pos[i].y, enPointSta.Target);
+                ledAnim.ChangeLed_Sta((int)X_Pos[i].x, (int)X_Pos[i].y, enPointSta.Target);
 
             }
             if (X_Pos[i].y <= 1 || X_Pos[i].y >= Set.setVal.Height - 2)
@@ -1531,7 +1531,7 @@ public class LedAnim_Struts : MonoBehaviour
             {
                 Game06_List0[player0_tarage_Now] = new Vector2(x, y);
 
-                Game_Map00.instance.ChangeLed_Sta(x, y, enPointSta.Target);
+                ledAnim.ChangeLed_Sta(x, y, enPointSta.Target);
                 player0_tarage_Now++;
                 cntX--;
             }
@@ -1547,7 +1547,7 @@ public class LedAnim_Struts : MonoBehaviour
             if (GameLedControl.gamePoint[pointID].statue == enPointSta.None)
             {
                 Game06_List1[player0_tarage_Now] = new Vector2(x, y);
-                Game_Map00.instance.ChangeLed_Sta(x, y, enPointSta.Target);
+                ledAnim.ChangeLed_Sta(x, y, enPointSta.Target);
                 cntX--;
                 player1_tarage_Now++;
             }
@@ -1569,7 +1569,7 @@ public class LedAnim_Struts : MonoBehaviour
                 return false;
             }
         }
-        Game_Map00.instance.isClearAll = true;
+        ledAnim.isClearAll = true;
         return true;
     }
     bool IsGamePass_06_1()
@@ -1584,7 +1584,7 @@ public class LedAnim_Struts : MonoBehaviour
             }
         }
 
-        Game_Map00.instance.isClearAll = true;
+        ledAnim.isClearAll = true;
         return true;
     }
 
@@ -1604,7 +1604,7 @@ public class LedAnim_Struts : MonoBehaviour
                 }
                 else
                 {
-                    Game_Map00.instance.isClearAll = true;
+                    ledAnim.isClearAll = true;
                     return;
                 }
 
@@ -1657,7 +1657,7 @@ public class LedAnim_Struts : MonoBehaviour
                     picID = XX + Set.setVal.Width * YY;
                     pointID = Framebuffer.tab_Mapping[picID];
 
-                    Game_Map00.instance.ChangeLed_Sta(XX, YY, enPointSta.Target);
+                    ledAnim.ChangeLed_Sta(XX, YY, enPointSta.Target);
                     //    GameLedControl.gamePoint[pointID].statue = enPointSta.Target;
                     break;
                 }
@@ -1770,13 +1770,13 @@ public class LedAnim_Struts : MonoBehaviour
         //    if (Game06_List1[i].x >= 0)
         //    {
 
-        //        Game_Map00.instance.ChangeLed_Sta((int)Game06_List1[i].x, (int)Game06_List1[i].y, enPointSta.Target);
+        //        ledAnim.ChangeLed_Sta((int)Game06_List1[i].x, (int)Game06_List1[i].y, enPointSta.Target);
 
         //    }
         //    if (Game06_List0[i].x >= 0)
         //    {
         //        Debug.LogError(Game06_List0[i]);
-        //           Game_Map00.instance.ChangeLed_Sta((int)Game06_List0[i].x, (int)Game06_List0[i].y, enPointSta.Target);
+        //           ledAnim.ChangeLed_Sta((int)Game06_List0[i].x, (int)Game06_List0[i].y, enPointSta.Target);
 
         //    }
         //}
@@ -1821,7 +1821,7 @@ public class LedAnim_Struts : MonoBehaviour
 
         SafeColor = 0x00ff00;
         Vector2 pos = Vector2.one;
-        pos = Game_Map00.instance.GetSafePlace(ID);
+        pos = ledAnim.GetSafePlace(ID);
 
         x = (int)pos.x;
         y = (int)pos.y;
@@ -1861,7 +1861,7 @@ public class LedAnim_Struts : MonoBehaviour
         {
             SafeTime = Random.Range(6, 11);
             Vector2 pos = new Vector2(x, y);
-            pos = Game_Map00.instance.GetSafePlace(ID);
+            pos = ledAnim.GetSafePlace(ID);
             x = (int)pos.x * 3;
             y = (int)pos.y * 3;
             SafeColor = 0x00ff00;
@@ -2007,10 +2007,10 @@ public class LedAnim_Struts : MonoBehaviour
         Color = 0xff0000;
         GoDownCnt = 0;
         int a = Random.Range(0, 100);
-        Game_Map00.instance.haveTwo = false;
+        ledAnim.haveTwo = false;
         if (a < 30)
         {
-            Game_Map00.instance.haveTwo = true;
+            ledAnim.haveTwo = true;
 
         }
         NewMap_Shaking_StayTime = 0.3f;
@@ -2019,13 +2019,13 @@ public class LedAnim_Struts : MonoBehaviour
         {
             NewMap_Shaking_StayTime = 0.2f;
             ShakeCntMax = 4;
-            Game_Map00.instance.haveTwo = true;
+            ledAnim.haveTwo = true;
         }
         if (Game00_Main.instance.remainTime < time / 4)
         {
             NewMap_Shaking_StayTime = 0.05f;
             ShakeCntMax = 2;
-            Game_Map00.instance.haveTwo = true;
+            ledAnim.haveTwo = true;
         }
     }
     Vector2[] newMap01_Group = new Vector2[2 * Set.setVal.Width];
@@ -3033,7 +3033,7 @@ public class LedAnim_Struts : MonoBehaviour
         pointID = Framebuffer.tab_Mapping[picID];
         if (GameLedControl.gamePoint[pointID].statue == enPointSta.Target)
         {
-            Game_Map00.instance.tarageNum--;
+            ledAnim.tarageNum--;
         }
         GameLedControl.gamePoint[0].statue = enPointSta.Die;
         FindTarage();
@@ -3053,7 +3053,7 @@ public class LedAnim_Struts : MonoBehaviour
             pointID = Framebuffer.tab_Mapping[picID];
             if (GameLedControl.gamePoint[pointID].statue == enPointSta.Target)
             {
-                Game_Map00.instance.tarageNum--;
+                ledAnim.tarageNum--;
             }
 
             GameLedControl.gamePoint[pointID].statue = enPointSta.Die;
