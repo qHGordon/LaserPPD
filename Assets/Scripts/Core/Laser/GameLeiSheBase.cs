@@ -1,6 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace LaserPPD.Core
+{
 
 /// <summary>
 /// 镭射游戏点结构体（已废弃，请使用统一的 GamePoint）
@@ -87,111 +90,23 @@ public struct GameLeiShePoint
     }
 }
 
+/// <summary>[Core.Laser] 镭射游戏点阵基础逻辑：管理通道点位状态、颜色同步与闪灯检测。</summary>
 public class GameLeiSheBase
 {
-    //public static GamePoint[,] gamePoint = new GamePoint[Main.MAX_CH, Main.MAX_LED_ONE];
-
-    //public static void Update_ColorFull (uint color, enPointSta sta) {
-    //    for (int i = 0; i < Main.MAX_CH; i++) {
-    //        for (int j = 0; j < Main.MAX_LED_ONE; j++) {
-    //            gamePoint[i, j].color = color;
-    //            gamePoint[i, j].statue = sta;
-    //        }
-    //    }
-    //    Framebuffer.Update_ColorFull (color);
-    //}
-    //public static void Update_ColorFull (int ch, uint color, enPointSta sta) {
-    //    for (int i = 0; i < Main.MAX_LED_ONE; i++) {
-    //        gamePoint[ch, i].color = color;
-    //        gamePoint[ch, i].statue = sta;
-    //        Framebuffer.Update_PointColor (ch, i, color);
-    //    }
-    //    //Framebuffer.Update_ColorFull (color);
-    //}
-    //public static void Update_PointColor (int ch, int id, uint color, enPointSta sta) {
-    //    if (ch >= Main.MAX_CH)
-    //        return;
-    //    if (id >= Main.MAX_LED_ONE)
-    //        return;
-    //    gamePoint[ch, id].color = color;
-    //    gamePoint[ch, id].statue = sta;
-    //    Framebuffer.Update_PointColor (ch, id, color);
-    //}
-    //public static void Update_PointColor (int ch, int x, int y, uint color, enPointSta sta) {
-    //    //int id = x * Set.setVal.Height + y;
-    //    if (x < 0 || y < 0)
-    //        return;
-    //    if (x >= Set.setVal.Width || y >= Set.setVal.Height)
-    //        return;
-    //    int id = y * Set.setVal.Width + x;
-    //    id = Framebuffer.tab_Mapping[id];
-    //    Update_PointColor (ch, id, color, sta);
-    //}
-
-
-    //public static void Clear () {
-    //    for (int i = 0; i < Main.MAX_CH; i++) {
-    //        for (int j = 0; j < Main.MAX_LED_ONE; j++) {
-    //            gamePoint[i, j].bindCnt = 0;
-    //            gamePoint[i, j].bindTime = 0;
-    //        }
-    //    }
-    //}
-    //public static void Check () {
-    //    for (int i = 0; i < Main.MAX_CH; i++) {
-    //        for (int j = 0; j < Main.MAX_LED_ONE; j++) {
-    //            // 闪灯
-    //            if (gamePoint[i, j].bindCnt > 0) {
-    //                if (gamePoint[i, j].bindTime > 0) {
-    //                    gamePoint[i, j].bindTime -= Time.deltaTime;
-    //                } else {
-    //                    gamePoint[i, j].bindCnt--;
-    //                    gamePoint[i, j].bindTime = 0.2f;
-    //                }
-    //                if (gamePoint[i, j].bindCnt == 0) {
-    //                    Framebuffer.Update_PointColor (i, j, gamePoint[i, j].color);
-    //                } else if ((gamePoint[i, j].bindCnt % 2) == 0) {
-    //                    Framebuffer.Update_PointColor (i, j, 0);
-    //                } else {
-    //                    Framebuffer.Update_PointColor (i, j, 0x1001);
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
-
     public const int MAX_LED_CH = 2;
 
     /// <summary>
     /// 游戏点数组（使用统一的 GamePoint 结构体）
     /// </summary>
-    public static GamePoint[] gamePoint = new GamePoint[Main.MAX_LED_ONE * MAX_LED_CH];
+    public static GamePoint[] gamePoint = new GamePoint[AppConst.MAX_LED_ONE * MAX_LED_CH];
     public static int[] tab_Point = new int[500];
-    //    {0,31,32,63,64,
-    //                                1,30,33,62,65,
-    //                                2,29,34,61,66,
-    //                                3,28,35,60,67,
-    //                                4,27,36,59,68,
-    //                                5,26,37,58,69,
-    //                                6,25,38,57,70,
-    //                                7,24,39,56,71,
-    //                                8,23,40,55,72,
-    //                                9,22,41,54,73,
-    //                                10,21,42,53,74,
-    //                                11,20,43,52,75,
-    //                                12,19,44,51,76,
-    //                                13,18,45,50,77,
-    //                                14,17,46,49,78,
-    //                                15,16,47,48,79,
 
-
-    //};
     /// <summary>
     /// 目标LED数组（使用统一的 GamePoint 结构体）
     /// </summary>
-    public static GamePoint[] targetLed = new GamePoint[Main.MAX_LED_ONE];
+    public static GamePoint[] targetLed = new GamePoint[AppConst.MAX_LED_ONE];
 
-    public static void Update_ColorFull(uint color, enPointSta sta)//镭射灯全部变颜色
+    public static void Update_ColorFull(uint color, enPointSta sta)
     {
         for (int i = 0; i < gamePoint.Length; i++)
         {
@@ -237,7 +152,6 @@ public class GameLeiSheBase
         Framebuffer.Update_TargetLedColor(id, color);
     }
 
-
     public static void Clear()
     {
         for (int i = 0; i < gamePoint.Length; i++)
@@ -279,4 +193,6 @@ public class GameLeiSheBase
             }
         }
     }
+}
+
 }

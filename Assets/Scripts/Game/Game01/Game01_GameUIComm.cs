@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LaserPPD.Core;
 
 public class Game01_GameUIComm : MonoBehaviour {
 	public GameObject tips_Obj;

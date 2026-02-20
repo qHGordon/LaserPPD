@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LaserPPD.Core;
 
 public enum en_ProgressBar_Start {
     Left = 0,

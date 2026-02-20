@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using LaserPPD.Core;
 
 public enum en_LoadingStatue {
     Logo_Company = 0,   // 公司LOGO

@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 public class CmdIOUpdate
 {
 
@@ -227,4 +231,5 @@ public class CmdIOUpdate
         //
         SendCmd (Cmd_TempBuf, 2);
     }
+}
 }

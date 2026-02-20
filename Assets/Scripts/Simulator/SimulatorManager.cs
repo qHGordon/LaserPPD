@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LaserPPD.Core;
 
 /// <summary>
 /// 硬件模拟器管理器

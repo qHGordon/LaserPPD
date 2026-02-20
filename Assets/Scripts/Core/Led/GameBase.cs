@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 public struct GamePoint2
 {
     public enPointSta statue;
@@ -12,7 +16,7 @@ public struct GamePoint2
 
 
 public class GameBase {
-	public static GamePoint2[] gamePoint = new GamePoint2[Main.MAX_LED];
+	public static GamePoint2[] gamePoint = new GamePoint2[AppConst.MAX_LED];
 
     public static void Update_ColorFull (uint color, enPointSta sta) {
         for (int i = 0; i < gamePoint.Length; i++) {
@@ -62,4 +66,5 @@ public class GameBase {
             }
         }
     }
+}
 }

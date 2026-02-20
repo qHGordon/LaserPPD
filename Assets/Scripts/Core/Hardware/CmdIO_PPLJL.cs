@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 //public delegate void SendData(byte[] buf, int len);
 
 // IO板串口协议
 public class CmdIO_PPLJL {
     static SendData sendData;
-    public static bool[] connectStatue = new bool[Main.MAX_PLAYER];
-    public static float[] connectTimeout = new float[Main.MAX_PLAYER];
-    public static float[] connectSendTime = new float[Main.MAX_PLAYER];
+    public static bool[] connectStatue = new bool[AppConst.MAX_PLAYER];
+    public static float[] connectTimeout = new float[AppConst.MAX_PLAYER];
+    public static float[] connectSendTime = new float[AppConst.MAX_PLAYER];
     // 指令部分
     const int CMDBUF_SIZE = 16;
     const byte CMD_HEAD = 0xaa;
@@ -33,7 +37,7 @@ public class CmdIO_PPLJL {
     };
 
     public static void CheckConnect() {
-        for (int i = 0; i < Main.MAX_PLAYER; i++) {
+        for (int i = 0; i < AppConst.MAX_PLAYER; i++) {
             connectTimeout[i] += Time.deltaTime;
             if (connectTimeout[i] >= 3.5f) {
                 connectTimeout[i] = 0;
@@ -102,7 +106,7 @@ public class CmdIO_PPLJL {
                     //Main.Log("Cmd: " + (en_CMDIO_CR)sc_cmdno);
                     switch ((en_CMD0)sc_cmdno) {
                     case en_CMD0.CMDIO_LINE: // 连线
-                        if (CmdBuf0[1] < Main.MAX_PLAYER) {
+                        if (CmdBuf0[1] < AppConst.MAX_PLAYER) {
                             connectTimeout[CmdBuf0[1]] = 0;
                             connectStatue[CmdBuf0[1]] = true;
                         }                        
@@ -142,7 +146,7 @@ public class CmdIO_PPLJL {
     public static void Init(SendData funSendData) {
         sendData = funSendData;
 
-        for (int i = 0; i < Main.MAX_PLAYER; i++) {
+        for (int i = 0; i < AppConst.MAX_PLAYER; i++) {
             connectTimeout[i] = 0;
             connectStatue[i] = true;
             connectSendTime[i] = i * 0.3f;
@@ -172,4 +176,5 @@ public class CmdIO_PPLJL {
         LAN_SendCmd(no, CMD0_OutBuf, 2);
     }
 
+}
 }

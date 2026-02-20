@@ -1,3 +1,6 @@
+﻿namespace LaserPPD.Core
+{
+
 /// <summary>
 /// [Core.Led] LED 地图回调接口，用于解耦 LedAnim_Struts 与具体 Game_Map 的静态引用。
 /// 由 Game_Map00、Game_Map06、Game_Map07 等实现，供 LedAnim_Struts_06/07/Wall 通过注入使用。
@@ -15,4 +18,5 @@ public interface ILedMapCallback
 
     /// <summary>剩余目标点数量（用于递减）</summary>
     int tarageNum { get; set; }
+}
 }

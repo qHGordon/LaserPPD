@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 
+namespace LaserPPD.Core
+{
+
+
 public class Eeprom
 {
     [DllImport("ztl_i2cwr")]
@@ -21,4 +25,5 @@ public class Eeprom
         // return 0;
         return ztl_i2c_write(1, buf, addr, len);
     }
+}
 }

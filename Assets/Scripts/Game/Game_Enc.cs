@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LaserPPD.Core;
 
 public class Game_Enc {
 	const bool VER_ENC_P15 = true;		//

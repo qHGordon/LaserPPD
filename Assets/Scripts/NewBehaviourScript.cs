@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using LaserPPD.Core;
 //using Newtonsoft.Json;
 //using Newtonsoft.Json.Serialization;
 

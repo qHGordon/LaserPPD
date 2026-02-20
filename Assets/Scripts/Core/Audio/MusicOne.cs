@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 public class MusicOne : MonoBehaviour {
     public AudioSource audioSource;
     float playTime = 0.3f;
@@ -28,4 +32,5 @@ public class MusicOne : MonoBehaviour {
             return;
         }
     }
+}
 }

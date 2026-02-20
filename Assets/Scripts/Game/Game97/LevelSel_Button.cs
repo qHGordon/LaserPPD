@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +16,7 @@ public class LevelSel_Button : MonoBehaviour {
     }
     // Use this for initialization
     void GiveID() {
-        gamemain.Map_Index = Id;
-        Main.MapID = Id;
+        gamemain.OnClick_Level(Id);
 
         //for (int i = 0; i < gamemain.buttons.Length; i++) {
         //    // gamemain.buttons[i].GetComponent<Image>().sprite = gamemain.buttons[i].GetComponent< LevelSel_Button > (). beSelect[0];

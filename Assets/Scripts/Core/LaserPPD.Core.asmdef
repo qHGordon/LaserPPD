@@ -1,6 +1,6 @@
 {
     "name": "LaserPPD.Core",
-    "rootNamespace": "",
+    "rootNamespace": "LaserPPD.Core",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -5,6 +5,10 @@ using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+namespace LaserPPD.Core
+{
+
+
 [Serializable]
 public class GameSetting
 {
@@ -27,7 +31,7 @@ public class GameSetting
     public GameLevelSetting[] gameLevelSetting = new GameLevelSetting[30];
     public GameSetting()
     {
-        maxLevel = Main.MAX_LEVEL;
+        maxLevel = AppConst.MAX_LEVEL;
         for (int i = 0; i < gameLevelSetting.Length; i++)
         {
             if (gameLevelSetting[i] == null)
@@ -39,10 +43,10 @@ public class GameSetting
 
     public void Default(int gameId, int playerMode)
     {
-        maxLevel = 8;  //Main.MAX_LEVEL;
-        if (gameLevelSetting.Length < Main.MAX_LEVEL)
+        maxLevel = 8;  //AppConst.MAX_LEVEL;
+        if (gameLevelSetting.Length < AppConst.MAX_LEVEL)
         {
-            gameLevelSetting = new GameLevelSetting[Main.MAX_LEVEL];
+            gameLevelSetting = new GameLevelSetting[AppConst.MAX_LEVEL];
         }
         for (int i = 0; i < gameLevelSetting.Length; i++)
         {
@@ -231,4 +235,5 @@ public class GameSetting
         gameSetting.Default(gameId, 0);
         SaveSetting(filename, gameSetting);
     }
+}
 }

@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 
 
 public enum en_PlayerIO
@@ -29,8 +33,8 @@ public class IO
     static byte IO_Statue;
     static bool sendChange;
     static float sendTime;
-    public static bool[] gunMotorSta = new bool[Main.MAX_PLAYER];
-    public static byte[] wallLedValue = new byte[Main.MAX_WALLLED];
+    public static bool[] gunMotorSta = new bool[AppConst.MAX_PLAYER];
+    public static byte[] wallLedValue = new byte[AppConst.MAX_WALLLED];
     //
     public static void Init()
     {
@@ -41,7 +45,7 @@ public class IO
         Update((int)en_PlayerIO.SSR1, false);
         Update((int)en_PlayerIO.SSR2, false);
 
-        for (int i = 0; i < Main.MAX_PLAYER; i++)
+        for (int i = 0; i < AppConst.MAX_PLAYER; i++)
         {
             GunMotorStop(i);
             ButtonLED(i, 0);
@@ -119,7 +123,7 @@ public class IO
     {
         if (gunMotorDcTime[playerno] > 0)
             return;
-        if (playerno < Main.MAX_PLAYER && time > 0)
+        if (playerno < AppConst.MAX_PLAYER && time > 0)
         {
             Out_LED(playerno * 2, 1);
             Out_LED(playerno * 2 + 1, 1);
@@ -130,7 +134,7 @@ public class IO
      * */
     public static void GunMotorStart(int playerno)
     {
-        if (playerno >= Main.MAX_PLAYER)
+        if (playerno >= AppConst.MAX_PLAYER)
             return;
         Out_LED(playerno * 2, 1);
         Out_LED(playerno * 2 + 1, 1);
@@ -138,7 +142,7 @@ public class IO
     }
     public static void GunMotorStop(int playerno)
     {
-        if (playerno >= Main.MAX_PLAYER)
+        if (playerno >= AppConst.MAX_PLAYER)
             return;
         Out_LED(playerno * 2, 0);
         Out_LED(playerno * 2 + 1, 0);
@@ -186,4 +190,5 @@ public class IO
         //Framebuffer.Update_PointColor (5, 0, color);
         CmdIO_YDGZ.CMD0_SendCmd_LedOne(5, color, bufId, 1);
     }
+}
 }

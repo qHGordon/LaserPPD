@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.UI.CanvasScaler;
+using LaserPPD.Core;
 
 public class Game_Map05 : MonoBehaviour
 {

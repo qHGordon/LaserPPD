@@ -1,4 +1,8 @@
-using System;
+﻿using System;
+
+namespace LaserPPD.Core
+{
+
 
 /// <summary>
 /// [Core.Hardware] 硬件协议接口
@@ -46,4 +50,5 @@ public interface IHardwareProtocol
     /// 发送协议配置
     /// </summary>
     void SendProtocol();
+}
 }

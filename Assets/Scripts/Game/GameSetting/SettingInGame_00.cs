@@ -1,4 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
+using LaserPPD.Core;
 
 /// <summary>
 /// 将游戏00的设置定义为 ScriptableObject。

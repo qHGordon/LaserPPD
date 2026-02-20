@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+namespace LaserPPD.Core
+{
+
+
 public class MusicManager : MonoBehaviour {
 	public GameObject musicOne_Prefab;
 
@@ -152,4 +156,5 @@ public class MusicManager : MonoBehaviour {
 		}
 		return audioClip_Leishe_BGM[gameMusicIndex];
 	}
+}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Runtime.InteropServices;		//调用库
+using LaserPPD.Core;
 
 public enum en_MenuStatue
 {

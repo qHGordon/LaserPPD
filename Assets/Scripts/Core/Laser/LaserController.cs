@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 /// <summary>
 /// 激光控制器实现类
 /// 负责激光矩阵管理和数据发送
@@ -172,4 +176,5 @@ public class LaserController : MonoBehaviour, ILaserController
             hardwareProtocol.SendLedOne(laserId, 0, data, length);
         }
     }
+}
 }

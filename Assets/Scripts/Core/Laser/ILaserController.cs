@@ -1,5 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+
+namespace LaserPPD.Core
+{
+
 
 /// <summary>
 /// 激光控制器接口
@@ -35,4 +39,5 @@ public interface ILaserController
     /// <param name="matrix">输入矩阵</param>
     /// <returns>索引数组，如果转换失败返回null</returns>
     uint[] MatrixToIndexArray(int[,] matrix);
+}
 }

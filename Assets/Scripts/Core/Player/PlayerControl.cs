@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 public class PlayerControl {
-    LedAnim[] ledAnim = new LedAnim[Main.MAX_ANIM];
+    LedAnim[] ledAnim = new LedAnim[AppConst.MAX_ANIM];
 	AnimSet animSetting;
 	//
 	public int startx;
@@ -28,7 +32,7 @@ public class PlayerControl {
 		//
 		int mw; // 边框宽度
 		int mLen;
-		if (no >= Main.MAX_PLAYER)
+		if (no >= AppConst.MAX_PLAYER)
 			return;
 		if (Set.setVal.Width >= Set.setVal.Height) {
 			mLen = Set.setVal.Width;
@@ -322,4 +326,5 @@ public class PlayerControl {
 		return true;
 	}
 
+}
 }

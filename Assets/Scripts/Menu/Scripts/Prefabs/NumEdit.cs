@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LaserPPD.Core;
 
 // 数字编辑器*****
 public class NumEdit : MonoBehaviour {

@@ -1,6 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace LaserPPD.Core
+{
+
 
 public delegate void SendData(byte[] buf, int len);
 
@@ -144,7 +148,7 @@ public class CmdIO {
 							l1 |= (ulong)(LAN_CmdBuf [3 + sc_c3] << (sc_c3 * 8));
 						}
 						Key.KEY_Update (l1);
-						if (Main.statue <= en_MainStatue.Game_97 || Main.statue == en_MainStatue.LoadScene) {
+						if (IoAppDownload.mainStatue <= en_MainStatue.Game_97 || IoAppDownload.mainStatue == en_MainStatue.LoadScene) {
 							PAction.Check ();
 						}
 						break;
@@ -310,4 +314,5 @@ public class CmdIO {
         LAN_SendCmd((byte)en_CMD0.CMD0_BUTTONLED, CMD0_OutBuf);
     }
 #endif
+}
 }

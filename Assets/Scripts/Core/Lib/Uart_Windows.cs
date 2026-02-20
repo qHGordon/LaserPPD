@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System;
+
+namespace LaserPPD.Core
+{
+
 
 //public delegate void SetCode (byte dat);
 
@@ -71,9 +75,9 @@ public class Uart_Windows
     void Open () {
         try {
             hCom = UART_Open (uartNo, baudRatio);
-            Main.Log ("hCom_" + uartNo + ": " + hCom.ToString ());
+            Debug.Log ("hCom_" + uartNo + ": " + hCom.ToString ());
         } catch (ArgumentException e) {
-            Main.Log ("UART_Open Error: " + e.Message);
+            Debug.Log ("UART_Open Error: " + e.Message);
         }
         if (hCom > 0) {
             errorSta = 0;
@@ -271,4 +275,5 @@ public class Uart_Windows
             return writeIn + writeBuf.Length - writeOut;
         }
     }
+}
 }

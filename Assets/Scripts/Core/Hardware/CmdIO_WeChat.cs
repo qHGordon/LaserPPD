@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+namespace LaserPPD.Core
+{
+
+
 public class CmdIO_WeChat
 {
 #if IO_YDGZ
@@ -39,7 +43,7 @@ public class CmdIO_WeChat
         {
             connectTimeout = 0;
             connectStatue = false;
-            Main.ioVersion = 0;
+            AppConst.ioVersion = 0;
         }
         connectSendTime += Time.deltaTime;
         if (connectSendTime >= 1.0f)
@@ -240,4 +244,5 @@ public class CmdIO_WeChat
         LAN_SendCmd((byte)en_CMDLED.CMDLED_Score, CMD0_OutBuf, 2);
     }
 #endif
+}
 }

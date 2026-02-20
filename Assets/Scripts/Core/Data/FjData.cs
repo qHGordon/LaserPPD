@@ -1,6 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace LaserPPD.Core
+{
+
 
 public struct Acc
 {
@@ -41,9 +45,9 @@ public struct GameData
 
 public class FjData
 {
-    public static Acc[] acc = new Acc[Main.MAX_PLAYER];             // 当期账目
-    public static Acc[] totalAcc = new Acc[Main.MAX_PLAYER];            // 历史总账目
-    public static GameData[] g_Fj = new GameData[Main.MAX_PLAYER];      // 当前数据，临时数据
+    public static Acc[] acc = new Acc[AppConst.MAX_PLAYER];             // 当期账目
+    public static Acc[] totalAcc = new Acc[AppConst.MAX_PLAYER];            // 历史总账目
+    public static GameData[] g_Fj = new GameData[AppConst.MAX_PLAYER];      // 当前数据，临时数据
     public static RankList rankList;
 
 #if SAVE_FILE
@@ -76,7 +80,7 @@ public class FjData
     {
         int l1;
 
-        for (int i = 0; i < Main.MAX_PLAYER; i++)
+        for (int i = 0; i < AppConst.MAX_PLAYER; i++)
         {
             //ACC ---------------------------
             //
@@ -414,7 +418,7 @@ public class FjData
     // 读IO板方式 -----------------------------------------------------------------------------
     // 账目地址
     const byte ADDR_ACC_START = (byte)en_IOSAVE_ADDR.FJDATA_START;
-    const byte ADDR_TOTALACC_START = (byte)en_IOSAVE_ADDR.FJDATA_START + ADDR_ACC_COUNT * Main.MAX_PLAYER;
+    const byte ADDR_TOTALACC_START = (byte)en_IOSAVE_ADDR.FJDATA_START + ADDR_ACC_COUNT * AppConst.MAX_PLAYER;
     const byte ADDR_CoinIn = 0;         //总投币
     const byte ADDR_BillIn = 1;         //总投币
     const byte ADDR_CoinOut = 2;        //总退币
@@ -423,7 +427,7 @@ public class FjData
     const int ADDR_ACC_COUNT = 9;
 
     // 游戏数据、临时数据
-    const byte ADDR_GAMEDATA_START = (byte)en_IOSAVE_ADDR.FJDATA_START + ADDR_ACC_COUNT * Main.MAX_PLAYER * 2;
+    const byte ADDR_GAMEDATA_START = (byte)en_IOSAVE_ADDR.FJDATA_START + ADDR_ACC_COUNT * AppConst.MAX_PLAYER * 2;
     const byte ADDR_Scores = 0;       //当前得分
     const byte ADDR_Coins = 1;        //当前分数
     const byte ADDR_Wins = 2;		    //当前分数
@@ -496,7 +500,7 @@ public class FjData
             bool res = true;
 
             dat = (int)SaveIO.ReadLong();
-            Main.Log("Load: " + (readAddrStart + readPlayerId * readAddrLengh + readId).ToString() + ", :" + dat);
+            Debug.Log("Load: " + (readAddrStart + readPlayerId * readAddrLengh + readId).ToString() + ", :" + dat);
             if ((uint)dat == SaveIO.INVALID_LONG)
             {
                 dat = 0;
@@ -512,7 +516,7 @@ public class FjData
                     {
                         readId = 0;
                         readPlayerId++;
-                        if (readPlayerId >= Main.MAX_PLAYER)
+                        if (readPlayerId >= AppConst.MAX_PLAYER)
                         {
                             LoadChangeStatue(en_LoadSta.TotalAcc);
                             break;
@@ -528,7 +532,7 @@ public class FjData
                     {
                         readId = 0;
                         readPlayerId++;
-                        if (readPlayerId >= Main.MAX_PLAYER)
+                        if (readPlayerId >= AppConst.MAX_PLAYER)
                         {
                             LoadChangeStatue(en_LoadSta.GameData);
                             break;
@@ -555,7 +559,7 @@ public class FjData
                     {
                         readId = 0;
                         readPlayerId++;
-                        if (readPlayerId >= Main.MAX_PLAYER)
+                        if (readPlayerId >= AppConst.MAX_PLAYER)
                         {
                             LoadChangeStatue(en_LoadSta.End);
                             return true;    // 全部接收完成
@@ -663,7 +667,7 @@ public class FjData
     // 清当期账目
     public static void ClearStart()
     {
-        //    SaveIO.ClearLongsStart(ADDR_START, Main.MAX_PLAYER * ADDR_ONE_PLAYER_COUNT);
+        //    SaveIO.ClearLongsStart(ADDR_START, AppConst.MAX_PLAYER * ADDR_ONE_PLAYER_COUNT);
     }
     public static bool Clear()
     {
@@ -738,7 +742,7 @@ public class FjData
 
     public static void ClearTotalStart()
     {
-        //        SaveIO.ClearLongsStart(ADDR_START, Main.MAX_PLAYER * 2 * ADDR_ONE_PLAYER_COUNT);
+        //        SaveIO.ClearLongsStart(ADDR_START, AppConst.MAX_PLAYER * 2 * ADDR_ONE_PLAYER_COUNT);
     }
     public static bool ClearTotal()
     {
@@ -775,4 +779,5 @@ public class FjData
 #endif
         return true;
     }
+}
 }

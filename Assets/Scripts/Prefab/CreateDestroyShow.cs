@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LaserPPD.Core;
 
 public class CreateDestroyShow : MonoBehaviour {
     public float showTime = 0.5f;

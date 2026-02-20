@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LaserPPD.Core;
 
 /// <summary>[Game00] 游戏地图控制器，实现 ILedMapCallback 供 LedAnim_Struts 解耦调用。</summary>
 public class Game_Map00 : MonoBehaviour, ILedMapCallback
@@ -24,7 +25,7 @@ public class Game_Map00 : MonoBehaviour, ILedMapCallback
     [HideInInspector]
     public int snakeLength;
     [HideInInspector]
-    public int tarageNum = 20;
+    public int tarageNum { get; set; } = 20;
 
 
     public int TarageNum_now = 0;
@@ -46,7 +47,7 @@ public class Game_Map00 : MonoBehaviour, ILedMapCallback
     float angly = 0;
     bool haveClear = false;//是否已经过场完成
     public bool isCleaning = false;//是否过场
-    public bool isClearAll = false;//是否清理了所有的点
+    public bool isClearAll { get; set; } = false;//是否清理了所有的点
     public int remainPoint = 1;
 
     public int MaxJieDuan = 2;

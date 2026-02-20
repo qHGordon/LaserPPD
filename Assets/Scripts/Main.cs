@@ -10,25 +10,9 @@ using UnityEngine.Profiling;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.EventSystems;
+using LaserPPD.Core;
 
-public enum en_MainStatue
-{
-    Restart = -1,       // 开机
-    Game_00 = 0,
-    Game_01,
-    Game_02,
-    Game_03,
-    Game_04,
-    Game_05,
-    Game_06,
-    Game_07,
-    Game_97 = 97,
-    Game_98,
-
-    LoadScene,          // 加载游戏场景中..
-    Menu,
-    Game,
-}
+// en_MainStatue 已迁移至 LaserPPD.Core (AppConst.cs)
 
 enum en_LoadStatue
 {
@@ -41,7 +25,7 @@ enum en_LoadStatue
 
 
 
-/// <summary>[Core.Bootstrap] 主流程控制器，负责场景切换、游戏加载与全局状态。</summary>
+/// <summary>[Bootstrap] 主流程控制器，负责场景切换、游戏加载与全局状态。</summary>
 public class Main : MonoBehaviour
 {
     // 分辨率设置
@@ -52,7 +36,6 @@ public class Main : MonoBehaviour
     //目标分辨率
     public const float TARGET_SCREEN_WIDTH = 1920;
     public const float TARGET_SCREEN_HEIGHT = 1080;
-
 
     //------------------------------------------------------------------------------------------
     // 版本(固定语言)
@@ -137,8 +120,28 @@ public class Main : MonoBehaviour
     public AudioSource audioSource_CoinIn;
     public Image img_SuoPing;
 
-    // 全局变量 
-    public static int ioVersion = 0;
+    // 全局变量（ioVersion 镜像到 AppConst.ioVersion，供 Core 程序集访问）
+    public static int ioVersion
+    {
+        get => AppConst.ioVersion;
+        set => AppConst.ioVersion = value;
+    }
+    // receiveDataNum / addr / readAddr 镜像到 AppConst，供 SaveIO 在 Core 内写入、UI 层读取
+    public static int receiveDataNum
+    {
+        get => AppConst.receiveDataNum;
+        set => AppConst.receiveDataNum = value;
+    }
+    public static byte addr
+    {
+        get => AppConst.addr;
+        set => AppConst.addr = value;
+    }
+    public static byte readAddr
+    {
+        get => AppConst.readAddr;
+        set => AppConst.readAddr = value;
+    }
     public static int MapID = 0;
     public static int MapIndex = 0;
     public static float PlayTime;
@@ -172,9 +175,6 @@ public class Main : MonoBehaviour
 
 
     // 界面切换
-    public static int receiveDataNum = 0;       // 接收数据个数
-    public static byte readAddr;
-    public static byte addr;
     GameObject volumeCotroy;
 
     // 游戏参数设置
@@ -185,8 +185,8 @@ public class Main : MonoBehaviour
     public static Main instance;
     void Awake()
     {
-
         instance = this;
+        AppConst.onCoinIn = PlaySound_CoinIn;
         CanSend_Score = true;
         if (game00_Main != null)
         {
@@ -569,8 +569,8 @@ public class Main : MonoBehaviour
 
     public void ChangeStatue(en_MainStatue sta)
     {
-
         statue = sta;
+        IoAppDownload.mainStatue = sta;
         Key.Clear();
         IO.WallLED_All(0);
         Framebuffer.Clear();

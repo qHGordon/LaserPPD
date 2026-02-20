@@ -1,9 +1,10 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using Game_LaserTouch; // LaserTouch 命名空间
+using LaserPPD.Core;
 
 public class SimulatorUI : MonoBehaviour
 {

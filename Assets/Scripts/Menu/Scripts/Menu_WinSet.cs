@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LaserPPD.Core;
 
 public class Menu_WinSet : MonoBehaviour {
     const int MAX_SET_ONEPAGE = 12;

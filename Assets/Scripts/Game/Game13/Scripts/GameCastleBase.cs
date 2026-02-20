@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LaserPPD.Core;
 
 /// <summary>
 /// 城堡攻防游戏基类

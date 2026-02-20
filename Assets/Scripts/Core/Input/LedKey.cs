@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 public class LedKey
 {
-    static byte[] keyDown = new byte[Main.MAX_LED];
-    static byte[] keyOld = new byte[Main.MAX_LED];
+    static byte[] keyDown = new byte[AppConst.MAX_LED];
+    static byte[] keyOld = new byte[AppConst.MAX_LED];
 
-    public static byte[] newSta = new byte[Main.MAX_LED];
-    public static byte[] holdSta = new byte[Main.MAX_LED];
-    public static float[] holdTime = new float[Main.MAX_LED];
+    public static byte[] newSta = new byte[AppConst.MAX_LED];
+    public static byte[] holdSta = new byte[AppConst.MAX_LED];
+    public static float[] holdTime = new float[AppConst.MAX_LED];
 
     const byte KEYDOWN_VALUE = 1;
 
 
     public static void Check()
     {
-        for (int i = 0; i < Main.MAX_LED; i++)
+        for (int i = 0; i < AppConst.MAX_LED; i++)
         {
             if (holdSta[i] != newSta[i])
             {
@@ -158,4 +162,5 @@ public class LedKey
     }
 
 
+}
 }

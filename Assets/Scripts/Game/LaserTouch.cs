@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using LaserPPD.Core;
 namespace Game_LaserTouch
 {
     public enum GameState_LaserTouch

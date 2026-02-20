@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 public class LedAnim_Buttle : MonoBehaviour
 {
+    /// <summary>游戏模块注入当前关卡号，替代对 Game00_Main 的直接引用。</summary>
+    public static int gameLevel = 0;
 
     public Vector2[] pos_Attack = { new Vector2(-1, -1), new Vector2(-1, -1) };
     int step = 0;
@@ -87,7 +93,7 @@ public class LedAnim_Buttle : MonoBehaviour
     void Update()
     {
         //GameLedControl.gamePoint[(int)runTime].statue = enPointSta.Rest;
-        if (Game00_Main.instance.gameLevel != 3)
+        if (gameLevel != 3)
         {
             Destroy(gameObject);
         }
@@ -117,4 +123,5 @@ public class LedAnim_Buttle : MonoBehaviour
 
         }
     }
+}
 }

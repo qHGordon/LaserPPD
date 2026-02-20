@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+namespace LaserPPD.Core
+{
+
+
 /// <summary>[Core.Hardware] 镭射硬件串口通信协议，负责 LED 指令下发与连接检测。</summary>
 public class CmdIO_YDGZ
 {
@@ -38,7 +42,7 @@ public class CmdIO_YDGZ
         {
             connectTimeout = 0;
             connectStatue = false;
-            Main.ioVersion = 0;
+            AppConst.ioVersion = 0;
         }
         connectSendTime += Time.deltaTime;
         if (connectSendTime >= 1.0f)
@@ -269,4 +273,5 @@ public class CmdIO_YDGZ
         LAN_SendCmd((byte)en_CMDLED.CMDLED_LED4ONE, CMD0_OutBuf, 5 + len * 2);
     }
 #endif
+}
 }

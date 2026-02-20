@@ -1,4 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
+
+namespace LaserPPD.Core
+{
+
 
 /// <summary>
 /// [Core.Config] 游戏内设置目标接口，用于解耦 SettingInGame 与具体 Game_Map、Game_Main 的静态引用。
@@ -14,4 +18,5 @@ public interface ISettingInGameTarget
 
     /// <summary>切换预设图显示状态</summary>
     void TogglePresetPicShow();
+}
 }

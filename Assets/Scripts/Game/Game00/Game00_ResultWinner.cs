@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LaserPPD.Core;
 
 public class Game00_ResultWinner : MonoBehaviour {
 	public Image image_Result;

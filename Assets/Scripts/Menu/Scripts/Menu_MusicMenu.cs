@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LaserPPD.Core;
 
 public class Menu_MusicMenu : MonoBehaviour {
     // 要显示的内容(中英文切换)    

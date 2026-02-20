@@ -1,4 +1,4 @@
-﻿using UnityEngine;  
+using UnityEngine;  
 using System.Collections;  
 using System.Collections.Generic;  
 using System.IO;  
@@ -26,13 +26,13 @@ public class logdata
 /// <summary>  
 /// 手机调试脚本  
 /// 本脚本挂在一个空对象或转换场景时不删除的对象即可  
-/// 错误和异常输出日记路径 Application.persistentDataPath  
+/// 错误和异常输出日记路�?Application.persistentDataPath  
 /// </summary>  
 public class ShowDebugInPhone : MonoBehaviour  
 {  
   
     List<logdata> logDatas = new List<logdata>();//log链表  
-    List<logdata> errorDatas = new List<logdata>();//错误和异常链表  
+    List<logdata> errorDatas = new List<logdata>();//错误和异常链�? 
     List<logdata> warningDatas = new List<logdata>();//警告链表  
   
     static List<string> mWriteTxt = new List<string>();  
@@ -46,7 +46,7 @@ public class ShowDebugInPhone : MonoBehaviour
     private string outpath;  
     void Start()  
     {  
-        //Application.persistentDataPath Unity中只有这个路径是既可以读也可以写的。  
+        //Application.persistentDataPath Unity中只有这个路径是既可以读也可以写的�? 
         //Debug.Log(Application.persistentDataPath);  
         outpath = Application.persistentDataPath + "/outLog.txt";  
         //每次启动客户端删除之前保存的Log  
@@ -54,7 +54,7 @@ public class ShowDebugInPhone : MonoBehaviour
         {  
             File.Delete(outpath);  
         }  
-        //转换场景不删除  
+        //转换场景不删�? 
         // Application.DontDestroyOnLoad(gameObject);  
         // Object.DontDestroyOnLoad(gameObject);
     }  
@@ -90,7 +90,7 @@ public class ShowDebugInPhone : MonoBehaviour
     }  
     void Update()  
     {  
-        //因为写入文件的操作必须在主线程中完成，所以在Update中才给你写入文件。  
+        //因为写入文件的操作必须在主线程中完成，所以在Update中才给你写入文件�? 
         if (errorDatas.Count > 0)  
         {  
             string[] temp = mWriteTxt.ToArray();  

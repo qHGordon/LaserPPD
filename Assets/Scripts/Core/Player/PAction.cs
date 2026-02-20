@@ -1,6 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace LaserPPD.Core
+{
+
 
 public class PAction
 {
@@ -8,23 +12,23 @@ public class PAction
     const float OUT_GIFT_TIMEOUT = 10.0f;	//退币超时时间
     const float OUT_COIN_TIMEOUT = 6.0f;	//退币超时时间
 
-    public static bool[] outing = new bool[Main.MAX_PLAYER];        // 退币/彩票/礼品 正在退状态
-    public static bool[] outEnable = new bool[Main.MAX_PLAYER];     // 退币/彩票/礼品 开关
-    public static bool[] outError = new bool[Main.MAX_PLAYER];
-    static float[] outTimeout = new float[Main.MAX_PLAYER];         // 退币/彩票/礼品超时时间    
-    static float[] outDcTime = new float[Main.MAX_PLAYER];         // 退币/彩票/礼品间隔时间    
-    static int[] outCount = new int[Main.MAX_PLAYER];                   // 单次已退币个数
+    public static bool[] outing = new bool[AppConst.MAX_PLAYER];        // 退币/彩票/礼品 正在退状态
+    public static bool[] outEnable = new bool[AppConst.MAX_PLAYER];     // 退币/彩票/礼品 开关
+    public static bool[] outError = new bool[AppConst.MAX_PLAYER];
+    static float[] outTimeout = new float[AppConst.MAX_PLAYER];         // 退币/彩票/礼品超时时间    
+    static float[] outDcTime = new float[AppConst.MAX_PLAYER];         // 退币/彩票/礼品间隔时间    
+    static int[] outCount = new int[AppConst.MAX_PLAYER];                   // 单次已退币个数
 
 
     //
-    //float[] codeTablePowerTime_CoinIn = new float[Main.MAX_PLAYER];
-    //float[] codeTablePowerTime_CoinOut = new float[Main.MAX_PLAYER];
-    //bool[] codeTableStatue_CoinIn = new bool[Main.MAX_PLAYER];
-    //bool[] codeTableStatue_CoinOut = new bool[Main.MAX_PLAYER];
+    //float[] codeTablePowerTime_CoinIn = new float[AppConst.MAX_PLAYER];
+    //float[] codeTablePowerTime_CoinOut = new float[AppConst.MAX_PLAYER];
+    //bool[] codeTableStatue_CoinIn = new bool[AppConst.MAX_PLAYER];
+    //bool[] codeTableStatue_CoinOut = new bool[AppConst.MAX_PLAYER];
 
     // Use this for initialization
     public static void Init () {
-        for (int i = 0; i < Main.MAX_PLAYER; i++) {
+        for (int i = 0; i < AppConst.MAX_PLAYER; i++) {
             outCount[i] = 0;
             outTimeout[i] = Time.time;
             outDcTime[i] = Time.time;
@@ -45,11 +49,11 @@ public class PAction
     // Update is called once per frame
     public static void Check () {
         return;
-        if (Main.statue >= en_MainStatue.Game_98 && Main.statue != en_MainStatue.LoadScene)
+        if (IoAppDownload.mainStatue >= en_MainStatue.Game_98 && IoAppDownload.mainStatue != en_MainStatue.LoadScene)
             return;
 
         int coins;
-        //int playerNum = Main.MAX_PLAYER;
+        //int playerNum = AppConst.MAX_PLAYER;
         //if (Set.setVal.PlayerMode == (int)en_PlayerMode.One) {
         //    playerNum = 1;
         //}
@@ -65,7 +69,7 @@ public class PAction
                     coins++;    //+= (uint)Set.setVal.CoinBl;
                     FjData.SaveAcc_CoinIn (i);
                     FjData.SaveTotalAcc_CoinIn (i);
-                    Main.instance.PlaySound_CoinIn ();
+                    AppConst.onCoinIn?.Invoke();
                 }
             }
 
@@ -83,7 +87,7 @@ public class PAction
                         }
                     } else if (i == 0) {
                         // 单退
-                        for (int j = 0; j < Main.MAX_PLAYER; j++) {
+                        for (int j = 0; j < AppConst.MAX_PLAYER; j++) {
                             if (outing[j]) {
                                 outCount[j]++;
                                 outTimeout[j] = Time.time;
@@ -137,12 +141,12 @@ public class PAction
                 } else {
                     // (单退)自动退币检测
                     int i1;
-                    for (i1 = 0; i1 < Main.MAX_PLAYER; i1++) {
+                    for (i1 = 0; i1 < AppConst.MAX_PLAYER; i1++) {
                         if (outError[i1] || outing[i1]) {
                             break;  // 不能退
                         }
                     }
-                    if (i1 >= Main.MAX_PLAYER) {
+                    if (i1 >= AppConst.MAX_PLAYER) {
                         //if (Main.enableAutoOut[i]) {
                         // 自动退奖励: 
                         switch ((en_OutMode)Set.setVal.OutMode) {
@@ -166,7 +170,7 @@ public class PAction
 
         // 修复
         if (Key.KEYFJ_ResetPressed (0)) {
-            for (int i = 0; i < Main.MAX_PLAYER; i++) {
+            for (int i = 0; i < AppConst.MAX_PLAYER; i++) {
                 outError[i] = false;
             }
         }
@@ -226,4 +230,5 @@ public class PAction
         outEnable[playerno] = false;
     }
 
+}
 }

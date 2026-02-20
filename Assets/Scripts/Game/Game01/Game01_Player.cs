@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LaserPPD.Core;
 
 public enum en_Player01Sta
 {

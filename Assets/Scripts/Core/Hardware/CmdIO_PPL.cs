@@ -1,6 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace LaserPPD.Core
+{
+
 
 public class CmdIO_PPL {
 #if IO_PPL || IO_PPLOC
@@ -119,7 +123,7 @@ public class CmdIO_PPL {
                         l1 = CmdBuf0[2];
                         
                         Key.KEY_Update(l1);
-                        if (Main.statue <= en_MainStatue.Game_97) {
+                        if (IoAppDownload.mainStatue <= en_MainStatue.Game_97) {
                             PAction.Check();
                         }
                         break;
@@ -192,3 +196,4 @@ public class CmdIO_PPL {
     }
 #endif  // IO_PPL
     }
+}

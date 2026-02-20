@@ -1,6 +1,10 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace LaserPPD.Core
+{
+
 
 /// <summary>
 /// [Core.Hardware] YDGZ 硬件协议实现类，封装 CmdIO_YDGZ 的静态方法，实现 IHardwareProtocol 接口。
@@ -104,4 +108,5 @@ public class YDGZProtocol : IHardwareProtocol
 
     public void SendProtocol() { }
 #endif
+}
 }

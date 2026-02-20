@@ -1,8 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using LaserPPD.Core;
 
 // 脚本综述：Game00 的主控制脚本，负责流程状态机驱动、关卡/阶段切换、计分与生命管理，
 // 并与墙灯硬件、LED 面板和 UI 进行交互，供玩法逻辑与外设联动。

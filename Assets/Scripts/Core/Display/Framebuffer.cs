@@ -1,8 +1,12 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+
+namespace LaserPPD.Core
+{
+
 
 public struct LED
 {
@@ -26,10 +30,10 @@ public class LedEnableSet
 /// <summary>[Core.Display] LED 显示缓冲，管理逻辑坐标与硬件点位映射，下发颜色到 LED 硬件。</summary>
 public class Framebuffer
 {
-    public static LED[] led = new LED[Main.MAX_LED];
+    public static LED[] led = new LED[AppConst.MAX_LED];
     /// <summary>逻辑坐标 (x,y) 到硬件点位索引的映射，picid = x + Width * y</summary>
-    public static int[] tab_Mapping = new int[Main.MAX_LED];
-    public static int[] tab_PosMapping = new int[Main.MAX_LED];
+    public static int[] tab_Mapping = new int[AppConst.MAX_LED];
+    public static int[] tab_PosMapping = new int[AppConst.MAX_LED];
     public static byte[,] ledMask = new byte[PresetPic.PIC_WIDTH, PresetPic.PIC_HEIGHT];
     public static bool isNewLeiShe = true;
 
@@ -168,7 +172,7 @@ public class Framebuffer
                 x = 0;
                 y = 0;
 
-                for (i = 0; i < Main.MAX_CH; i++)
+                for (i = 0; i < AppConst.MAX_CH; i++)
                 {
                     len = Set.ChannelLength[i];
                     for (j = 0; j < len && x >= 0 && x < Set.setVal.Width && y >= 0 && y < Set.setVal.Height + Set.setVal.WallNum_Height;)
@@ -213,7 +217,7 @@ public class Framebuffer
                 x = 0;
                 y = 0;
 
-                for (i = 0; i < Main.MAX_CH; i++)
+                for (i = 0; i < AppConst.MAX_CH; i++)
                 {
                     len = Set.ChannelLength[i];
                     for (j = 0; j < len && x >= 0 && x < Set.setVal.Width && y >= 0 && y < Set.setVal.Height + Set.setVal.WallNum_Height;)
@@ -258,7 +262,7 @@ public class Framebuffer
                 x = 0;
                 y = Set.setVal.Height + Set.setVal.WallNum_Height - 1;
 
-                for (i = 0; i < Main.MAX_CH; i++)
+                for (i = 0; i < AppConst.MAX_CH; i++)
                 {
                     len = Set.ChannelLength[i];
                     for (j = 0; j < len && x >= 0 && x < Set.setVal.Width && y >= 0 && y < Set.setVal.Height + Set.setVal.WallNum_Height;)
@@ -303,7 +307,7 @@ public class Framebuffer
                 x = 0;
                 y = Set.setVal.Height + Set.setVal.WallNum_Height - 1;
 
-                for (i = 0; i < Main.MAX_CH; i++)
+                for (i = 0; i < AppConst.MAX_CH; i++)
                 {
                     len = Set.ChannelLength[i];
                     for (j = 0; j < len && x >= 0 && x < Set.setVal.Width && y >= 0 && y < Set.setVal.Height + Set.setVal.WallNum_Height;)
@@ -349,7 +353,7 @@ public class Framebuffer
                 x = Set.setVal.Width - 1;
                 y = Set.setVal.Height + Set.setVal.WallNum_Height - 1;
 
-                for (i = 0; i < Main.MAX_CH; i++)
+                for (i = 0; i < AppConst.MAX_CH; i++)
                 {
                     len = Set.ChannelLength[i];
                     for (j = 0; j < len && x >= 0 && x < Set.setVal.Width && y >= 0 && y < Set.setVal.Height + Set.setVal.WallNum_Height;)
@@ -394,7 +398,7 @@ public class Framebuffer
                 x = Set.setVal.Width - 1;
                 y = Set.setVal.Height + Set.setVal.WallNum_Height - 1;
 
-                for (i = 0; i < Main.MAX_CH; i++)
+                for (i = 0; i < AppConst.MAX_CH; i++)
                 {
                     len = Set.ChannelLength[i];
                     for (j = 0; j < len && x >= 0 && x < Set.setVal.Width && y >= 0 && y < Set.setVal.Height + Set.setVal.WallNum_Height;)
@@ -440,7 +444,7 @@ public class Framebuffer
                 x = Set.setVal.Width - 1;
                 y = 0;
 
-                for (i = 0; i < Main.MAX_CH; i++)
+                for (i = 0; i < AppConst.MAX_CH; i++)
                 {
                     len = Set.ChannelLength[i];
                     for (j = 0; j < len && x >= 0 && x < Set.setVal.Width && y >= 0 && y < Set.setVal.Height + Set.setVal.WallNum_Height;)
@@ -485,7 +489,7 @@ public class Framebuffer
                 x = Set.setVal.Width - 1;
                 y = 0;
 
-                for (i = 0; i < Main.MAX_CH; i++)
+                for (i = 0; i < AppConst.MAX_CH; i++)
                 {
                     len = Set.ChannelLength[i];
                     for (j = 0; j < len && x >= 0 && x < Set.setVal.Width && y >= 0 && y < Set.setVal.Height + Set.setVal.WallNum_Height;)
@@ -535,7 +539,7 @@ public class Framebuffer
                 y = Set.setVal.Height - 1;
 
                 int idd = 0;
-                for (i = 0; i < Main.MAX_CH; i++)
+                for (i = 0; i < AppConst.MAX_CH; i++)
                 {
                     len = Set.ChannelLength[i];
                     for (j = 0; j < len && x >= 0 && x < Set.setVal.Width && y >= 0 && y < Set.setVal.Height;)
@@ -678,7 +682,7 @@ public class Framebuffer
             {
                 startId += Set.ChannelLength[ch];
                 ch++;
-                if (ch >= Main.MAX_CH)
+                if (ch >= AppConst.MAX_CH)
                 {
                     break;
                 }
@@ -717,12 +721,12 @@ public class Framebuffer
 
     // 
     const int MAX_DELAY = 100;
-    static byte[,] leiSheBuf = new byte[Main.MAX_LED, MAX_DELAY];
+    static byte[,] leiSheBuf = new byte[AppConst.MAX_LED, MAX_DELAY];
     static int leiSheBufIndex = 0;
 
     public static void ClearDelayBuf()
     {
-        for (int i = 0; i < Main.MAX_LED; i++)
+        for (int i = 0; i < AppConst.MAX_LED; i++)
         {
             for (int j = 0; j < MAX_DELAY; j++)
             {
@@ -819,7 +823,7 @@ public class Framebuffer
     // 发射灯
     public static void Update_TransmitLedClearAll()
     {
-        int len = Mathf.Min(Main.MAX_LED_ONE * MAX_LED_CH, Set.setVal.Width * Set.setVal.Height);
+        int len = Mathf.Min(AppConst.MAX_LED_ONE * MAX_LED_CH, Set.setVal.Width * Set.setVal.Height);
         for (int i = 0; i < len; i++)
         {
             led[i].color = 0;
@@ -830,7 +834,7 @@ public class Framebuffer
         // Debug.Log("AllWaitTime_2");
 #endif
     }
-    static byte[] ledCount = new byte[Main.MAX_LED];
+    static byte[] ledCount = new byte[AppConst.MAX_LED];
 
     public static void Init_LEDNum()
     {
@@ -903,12 +907,12 @@ public class Framebuffer
 
     // 目标灯
     public const int TARGETLED_CH = 4;
-    static uint[] targetLedBuf = new uint[Main.MAX_LED_ONE];
+    static uint[] targetLedBuf = new uint[AppConst.MAX_LED_ONE];
     public static void Update_TargetLedColorAll(uint color)
     {
         if (Set.ChannelLength[TARGETLED_CH] <= 0)
             return;
-        for (int i = 0; i < Main.MAX_LED_ONE && i < Set.ChannelLength[TARGETLED_CH]; i++)
+        for (int i = 0; i < AppConst.MAX_LED_ONE && i < Set.ChannelLength[TARGETLED_CH]; i++)
         {
             targetLedBuf[i] = (uint)i;
         }
@@ -918,7 +922,7 @@ public class Framebuffer
     {
         if (Set.ChannelLength[ch] <= 0)
             return;
-        for (int i = 0; i < Main.MAX_LED_ONE && i < Set.ChannelLength[ch]; i++)
+        for (int i = 0; i < AppConst.MAX_LED_ONE && i < Set.ChannelLength[ch]; i++)
         {
             targetLedBuf[i] = (uint)i;
         }
@@ -970,7 +974,7 @@ public class Framebuffer
     public static void Update_TargetLedColorAllByBuffer(uint color)
     {
         int startId = Set.setVal.Width * Set.setVal.Height;
-        for (int i = 0; i < Main.MAX_LED_ONE && i < Set.ChannelLength[TARGETLED_CH]; i++)
+        for (int i = 0; i < AppConst.MAX_LED_ONE && i < Set.ChannelLength[TARGETLED_CH]; i++)
         {
             led[i].color = color;
             //led[i].colorOld = 0;
@@ -993,4 +997,5 @@ public class Framebuffer
 #endif
         }
     }
+}
 }

@@ -1,42 +1,46 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 /// <summary>
-/// [Core.Led] 统一的游戏点结构体
-/// 包含所有游戏点的通用字段和特定字段，用于统一 GameLedControl 和 GameLeiSheBase 的数据结构
+/// [Core.Led] 统一的游戏点结构�?
+/// 包含所有游戏点的通用字段和特定字段，用于统一 GameLedControl �?GameLeiSheBase 的数据结�?
 /// </summary>
 public struct GamePoint
 {
     /// <summary>
-    /// 基础点信息（状态和颜色）
+    /// 基础点信息（状态和颜色�?
     /// </summary>
     public BaseGamePoint basePoint;
 
-    // ========== 通用LED控制字段（GameLedControl使用） ==========
+    // ========== 通用LED控制字段（GameLedControl使用�?==========
     /// <summary>
-    /// 死亡动画时间计数（通用LED控制使用）
+    /// 死亡动画时间计数（通用LED控制使用�?
     /// </summary>
     public int time;
 
     /// <summary>
-    /// 错误闪烁时间计数（通用LED控制使用）
+    /// 错误闪烁时间计数（通用LED控制使用�?
     /// </summary>
     public int errorTime;
 
     /// <summary>
-    /// 目标时间（通用LED控制使用）
+    /// 目标时间（通用LED控制使用�?
     /// </summary>
     public float tarageTime;
 
-    // ========== 镭射模式字段（GameLeiSheBase使用） ==========
+    // ========== 镭射模式字段（GameLeiSheBase使用�?==========
     /// <summary>
-    /// 绑定计数（闪烁次数，镭射模式使用）
+    /// 绑定计数（闪烁次数，镭射模式使用�?
     /// </summary>
     public int bindCnt;
 
     /// <summary>
-    /// 绑定时间（闪烁间隔，镭射模式使用）
+    /// 绑定时间（闪烁间隔，镭射模式使用�?
     /// </summary>
     public float bindTime;
 
@@ -64,7 +68,7 @@ public struct GamePoint
     }
 
     /// <summary>
-    /// 点的颜色（小写c，镭射模式使用，保持向后兼容）
+    /// 点的颜色（小写c，镭射模式使用，保持向后兼容�?
     /// </summary>
     public uint color
     {
@@ -73,7 +77,7 @@ public struct GamePoint
     }
 
     /// <summary>
-    /// 默认构造函数（通用LED控制）
+    /// 默认构造函数（通用LED控制�?
     /// </summary>
     public GamePoint(enPointSta statue, uint color, int time = 0, int errorTime = 0, float tarageTime = 0)
     {
@@ -81,14 +85,14 @@ public struct GamePoint
         this.time = time;
         this.errorTime = errorTime;
         this.tarageTime = tarageTime;
-        // 初始化镭射模式字段为默认值
+        // 初始化镭射模式字段为默认�?
         this.bindCnt = 0;
         this.bindTime = 0;
         this.error = false;
     }
 
     /// <summary>
-    /// 重置为默认值
+    /// 重置为默认�?
     /// </summary>
     public void Reset()
     {
@@ -102,11 +106,14 @@ public struct GamePoint
     }
 }
 
-/// <summary>[Core.Led] LED 点阵控制，管理 gamePoint 状态与 Framebuffer 同步。</summary>
+/// <summary>[Core.Led] LED 点阵控制，管�?gamePoint 状态与 Framebuffer 同步�?/summary>
 public class GameLedControl
 {
-    public static GamePoint[] gamePoint = new GamePoint[Main.MAX_LED];
-    public static PlayerControl[] playerControl = new PlayerControl[Main.MAX_PLAYER];
+    public static GamePoint[] gamePoint = new GamePoint[AppConst.MAX_LED];
+    public static PlayerControl[] playerControl = new PlayerControl[AppConst.MAX_PLAYER];
+
+    /// <summary>游戏模块�?PlayStart 时注册的回调，由具体游戏脚本（Game00_Main 等）实现地图初始化�?/summary>
+    public static System.Action<GameLevelSetting> onPlayStart;
     static PresetPic picSetting;
     static bool isRunning = false;
     static float runTime;
@@ -193,64 +200,8 @@ public class GameLedControl
         //}
 
 
-        switch (Set.setVal.GameChoose)
-        {
-            case 0:
-               Game_Map00.instance.InitMap(Game00_Main.instance.gameLevel);
-#if LiuGuang
-                Map_WallLED.instance.InitMap(Game00_Main.instance.gameLevel);
-#endif
-
-                break;
-            case 1:
-             //   Game_Map01.instance.InitMap(Game01_Main.instance.gameLevel);
-
-                break;
-            case 2:
-                //   
-                if (Game02_Main.instance.BigGameLevel!=2)
-                {
-                    DrawBianKuang(playerMode, bkWidth);
-                    SetRestPoint(levelSetting.picSetting.dataBuff);
-                    for (int i = 0; i < playerControl.Length && i < playerNum; i++)
-                    {
-                        playerControl[i].RunStart(levelSetting.animSetting);
-                    }
-                }
-                else
-                {
-                    Debug.LogError(Game02_Main.instance.gameLevel);
-                    Game_Map02.instance.InitMap(Game02_Main.instance.gameLevel-20);
-                }
-               
-                break;
-        }
-        if (Set.setVal.GameChoose==0)
-        {
-            if (Game00_Main.instance.gameLevel < 30)
-            {
-                for (int i = 0; i < GameLedControl.gamePoint.Length; i++)
-                {
-                    if (GameLedControl.gamePoint[i].statue != enPointSta.Target && GameLedControl.gamePoint[i].statue != enPointSta.Rest)
-                    {
-                        GameLedControl.gamePoint[i].statue = enPointSta.None;
-                    }
-
-                }
-
-            
-
-            }
-            else
-            {
-                DrawBianKuang(playerMode, bkWidth);
-                SetRestPoint(levelSetting.picSetting.dataBuff);
-                for (int i = 0; i < playerControl.Length && i < playerNum; i++)
-                {
-                    playerControl[i].RunStart(levelSetting.animSetting);
-                }
-            }
-        }
+        // 委托具体游戏模块执行地图初始化（各游�?Main 脚本通过 GameLedControl.onPlayStart 回调注册�?
+        onPlayStart?.Invoke(levelSetting);
 
     
 
@@ -266,31 +217,17 @@ public class GameLedControl
             return;
         }
         runTime = 0;
-        // 1步:
+        // 1�?
         Framebuffer.FullScreen(0, enPointSta.None);
         //FullScreen (0, enPointSta.None);
         //   DrawBianKuang (playerMode, bkWidth);
         DrawPresetPic();
         // 玩家花样
-        switch (Set.setVal.GameChoose)
+        for (int i = 0; i < playerControl.Length && i < playerNum; i++)
         {
-            case 0:
-                if (Game00_Main.instance.gameLevel >= 30)
-                {
-                    for (int i = 0; i < playerControl.Length && i < playerNum; i++)
-                    {
-                        playerControl[i].RunCheck();
-                    }
-                }
-                break;
-            case 1:
-                break;
-            case 2:
-                playerControl[0].RunCheck();
-                break;
-
+            playerControl[i].RunCheck();
         }
-         CheckTaragePoint();
+        CheckTaragePoint();
         ShowErrorAndDiedingPoint();
 
 
@@ -307,7 +244,7 @@ public class GameLedControl
             return;
         }
         runTime = 0;
-        // 1步:
+        // 1�?
         Framebuffer.FullScreen(0, enPointSta.None);
         //FullScreen (0, enPointSta.None);
         //   DrawBianKuang (playerMode, bkWidth);
@@ -317,23 +254,9 @@ public class GameLedControl
 
         }
         // 玩家花样
-        switch (Set.setVal.GameChoose)
+        for (int i = 0; i < playerControl.Length && i < playerNum; i++)
         {
-            case 0:
-                if (Game00_Main.instance.gameLevel >= 30)
-                {
-                    for (int i = 0; i < playerControl.Length && i < playerNum; i++)
-                    {
-                        playerControl[i].RunCheck();
-                    }
-                }
-                break;
-            case 1:
-                break;
-            case 2:
-                playerControl[0].RunCheck();
-                break;
-
+            playerControl[i].RunCheck();
         }
         CheckTaragePoint();
         ShowErrorAndDiedingPoint();
@@ -354,11 +277,11 @@ public class GameLedControl
     public static void DrawBianKuang(en_PlayerMode playerMode, int bkWidth)
     {
         int i;
-        // 画边框         
+        // 画边�?        
         //for (i = 0; i < bkWidth; i++) {
         //    DrawPic.DrawRectangleKuang (i, i, Set.setVal.Width - i * 2, Set.setVal.Height - i * 2, 0x00fc00, enPointSta.Rest);
         //}
-        // 画中线
+        // 画中�?
         if (playerMode == en_PlayerMode.Free)
             return;
         int mw;
@@ -439,7 +362,7 @@ public class GameLedControl
             }
         }
 
-        // 玩家2对称图案：
+        // 玩家2对称图案�?
         if (playerMode != en_PlayerMode.Free)
         {
             for (i = 0; i < playerControl[0].width; i++)
@@ -463,7 +386,7 @@ public class GameLedControl
             }
         }
     }
-    // 画图案
+    // 画图�?
     public static void DrawPresetPic()
     {
         //if (picSetting == null)
@@ -471,9 +394,9 @@ public class GameLedControl
         int i;
         int len;
         len = Set.setVal.Width * Set.setVal.Height;
-        if (len > Main.MAX_LED)
+        if (len > AppConst.MAX_LED)
         {
-            len = Main.MAX_LED;
+            len = AppConst.MAX_LED;
         }
 
         for (i = 0; i < len; i++)
@@ -505,9 +428,9 @@ public class GameLedControl
 
         int len;
         len = Set.setVal.Width * Set.setVal.Height;
-        if (len > Main.MAX_LED)
+        if (len > AppConst.MAX_LED)
         {
-            len = Main.MAX_LED;
+            len = AppConst.MAX_LED;
         }
         for (int i = 0; i < len; i++)
         {
@@ -524,9 +447,9 @@ public class GameLedControl
         int i;
         int len;
         len = Set.setVal.Width * Set.setVal.Height;
-        if (len > Main.MAX_LED)
+        if (len > AppConst.MAX_LED)
         {
-            len = Main.MAX_LED;
+            len = AppConst.MAX_LED;
         }
 
         for (i = 0; i < len; i++)
@@ -559,4 +482,5 @@ public class GameLedControl
             }
         }
     }
+}
 }

@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 public enum en_TargetNewType
 {
     Random = 0,
@@ -32,10 +36,10 @@ public class GameLevelSetting
 
     [NonSerialized]
     public PresetPic picSetting;
-    //public byte[] presetPic = new byte[Main.MAX_LED];
+    //public byte[] presetPic = new byte[AppConst.MAX_LED];
     [NonSerialized]
     public AnimSet animSetting;
-    //public AnimOne[] animInfo = new AnimOne[Main.MAX_ANIM];
+    //public AnimOne[] animInfo = new AnimOne[AppConst.MAX_ANIM];
 
     public static readonly int[] tab_gameTime = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 150, 180 };
     public static readonly int[] tab_life = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
@@ -172,4 +176,5 @@ public class GameLevelSetting
 
 
     }
+}
 }

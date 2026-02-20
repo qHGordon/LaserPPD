@@ -6,6 +6,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 public enum en_Language
 {
     Chinese = 0,		// 中文
@@ -327,13 +331,13 @@ public class Set
     };
     //
     public static GameSet setVal;
-    public static int[] ChannelLength = new int[Main.MAX_CH];
-    public static int[] StartPos = new int[Main.MAX_CH];
-    public static int[] GameSelect = new int[Main.tab_GameId.Length];
+    public static int[] ChannelLength = new int[AppConst.MAX_CH];
+    public static int[] StartPos = new int[AppConst.MAX_CH];
+    public static int[] GameSelect = new int[AppConst.tab_GameId.Length];
     public static GameSetting[] gameSetting = new GameSetting[8];
     public static string[] gameName = new string[8];
     //public static string[] gameLeiSheName = new string[3];
-    //public static GameLevelSetting[] gameLevelSetting = new GameLevelSetting[Main.MAX_LEVEL];
+    //public static GameLevelSetting[] gameLevelSetting = new GameLevelSetting[AppConst.MAX_LEVEL];
 
     static bool CheckLoad(int val, int[] tab)
     {
@@ -1192,4 +1196,5 @@ public class Set
         return Directory.GetFiles (directory);
     }
     */
+}
 }

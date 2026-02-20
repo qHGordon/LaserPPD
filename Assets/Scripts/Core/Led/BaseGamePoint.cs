@@ -1,4 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
+
+namespace LaserPPD.Core
+{
+
 
 /// <summary>
 /// 基础游戏点结构体
@@ -33,4 +37,5 @@ public struct BaseGamePoint
         statue = enPointSta.None;
         color = 0;
     }
+}
 }

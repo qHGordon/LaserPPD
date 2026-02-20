@@ -1,7 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
+using LaserPPD.Core;
 
 /// <summary>单个激光对象的配置，对应一次 New_LedOne 调用</summary>
 [System.Serializable]

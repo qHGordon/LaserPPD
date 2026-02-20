@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 
+namespace LaserPPD.Core
+{
+
+
 
 public delegate void SetCode(byte dat);
 
@@ -78,4 +82,5 @@ public class Uart_Android {
 			SERIALPORT_Close (portFd);
 		}
 	}
+}
 }

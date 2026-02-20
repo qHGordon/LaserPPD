@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using System;
+using LaserPPD.Core;
 
 public enum en_Change_MoveType
 {

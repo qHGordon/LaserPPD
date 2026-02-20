@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using LaserPPD.Core;
 
 /// <summary>[Game01] 镭射激光单点对象，负责运动、渲染与踩点碰撞检测。</summary>
 public class Game01_Ledone : MonoBehaviour

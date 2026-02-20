@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace LaserPPD.Core
+{
+
+
 struct stColor
 {
     public byte r;
@@ -25,6 +29,8 @@ public enum en_LedType
 
 public class LedAnim
 {
+    /// <summary>游戏模块注入的速度偏移量，替代对 Game00_Main/Game02_Main 的直接引用。</summary>
+    public static int speedOffset = 0;
 
     readonly static stColor[] tab_stColor = {
         new stColor (0,0,0),		//	COLOR_NONE = 0,
@@ -144,21 +150,21 @@ public class LedAnim
                 trueSpeed = speed;
                 break;
             case 0:
-                trueSpeed = speed - Game00_Main.instance.Index_JieDuan;
+                trueSpeed = speed - speedOffset;
                 if (trueSpeed <= 1)
                 {
                     trueSpeed = 1;
                 }
                 break;
             case 2:
-                trueSpeed = speed - SettingInGame_02.instance.set_MoveSpeed[Game02_Main.instance.Index_JieDuan]*5;
+                trueSpeed = speed - speedOffset;
                 if (trueSpeed<=10)
                 {
                     trueSpeed = 10;
                 }
                 break;
         }
-     //   Debug.LogError("speed"+ SettingInGame_02.instance.set_MoveSpeed[Game02_Main.instance.Index_JieDuan] + "    "+ trueSpeed);
+     //   Debug.LogError("speed offset: " + speedOffset + "    trueSpeed: " + trueSpeed);
         if (runTime >= trueSpeed)
         {  //speed
             runTime = 0;
@@ -654,4 +660,5 @@ public class LedAnim
             }
         }
     }
+}
 }

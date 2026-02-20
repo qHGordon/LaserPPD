@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using LaserPPD.Core;
 
 public class CardInputCheck :MonoBehaviour {
 
