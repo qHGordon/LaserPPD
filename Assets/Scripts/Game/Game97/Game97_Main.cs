@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,7 @@ public enum en_Game97_Sta
     UserManager,
     TheEnd,
 }
-/// <summary>[Hub] 游戏入口 Hub，选择场景、难度、玩家模式，调度各游戏模块。</summary>
+//选择场景
 public class Game97_Main : MonoBehaviour
 {
     public Game97_Idle gameIdle;

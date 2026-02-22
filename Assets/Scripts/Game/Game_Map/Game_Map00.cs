@@ -1,9 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>[Game00] 游戏地图控制器，实现 ILedMapCallback 供 LedAnim_Struts 解耦调用。</summary>
-public class Game_Map00 : MonoBehaviour, ILedMapCallback
+public class Game_Map00 : MonoBehaviour
 {
 
 
@@ -1858,6 +1857,127 @@ public class Game_Map00 : MonoBehaviour, ILedMapCallback
 
         }
         GetRandom_Tarage();
+    }
+    void InitMap_28_old(int jieduan)
+    {
+
+        Clear();
+        isClearing_Game25 = false;
+        isClearAll = false;
+        tarageCol = Random.Range(0, 4);
+        isOver_25 = false;
+        x = 0;
+        y = 0;
+        MaxJieDuan = 4;
+        tarageNum = Game00_Main.instance.player[0].playerUI.Ingame_Setting.GetTarageNum();
+
+        for (int i = 0; i < ledSturts_Group.Length; i++)
+        {
+            ledSturts_Group[i].enabled = false;
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+            ledSturts_Group[i].enabled = true;
+        }
+
+
+        ledSturts_Group[0].enabled = true;
+        for (int i = 0; i < Set.setVal.Height; i++)
+        {
+            ChangeLed_Sta(0, i, enPointSta.Rest);
+            ChangeLed_Sta(1, i, enPointSta.Rest);
+            ChangeLed_Sta(Set.setVal.Width - 1, i, enPointSta.Rest);
+            ChangeLed_Sta(Set.setVal.Width - 2, i, enPointSta.Rest);
+        }
+        if (jieduan == 0)
+        {
+            ledSturts_Group[0].x = 2;
+            ledSturts_Group[0].y = Set.setVal.Height - 1;
+        }
+
+
+
+
+        switch (jieduan)//蓝
+        {
+            case 0:
+            case 1:
+            case 2:
+                GetRandom_Tarage();
+                break;
+
+
+
+            case 3:
+
+
+                for (int i = 0; i < Set.setVal.Width; i++)
+                {
+                    for (int k = 0; k < Set.setVal.Height; k++)
+                    {
+                        picId = i + k * Set.setVal.Width;
+                        pointId = Framebuffer.tab_Mapping[picId];
+                        if (GameLedControl.gamePoint[pointId].statue == enPointSta.None)
+                        {
+                            GameLedControl.gamePoint[pointId].statue = enPointSta.Target;
+                            GameLedControl.gamePoint[pointId].statue = enPointSta.Target;
+                        }
+                    }
+                }
+
+                break;
+        }
+        if (jieduan == 2)
+        {
+            for (int i = 0; i < Set.setVal.Width; i++)
+            {
+                for (int k = 0; k < Set.setVal.Height; k++)
+                {
+                    picId = i + k * Set.setVal.Width;
+                    pointId = Framebuffer.tab_Mapping[picId];
+                    if (GameLedControl.gamePoint[pointId].statue == enPointSta.None)
+                    {
+                        GameLedControl.gamePoint[pointId].statue = enPointSta.Die;
+                    }
+                }
+            }
+
+
+            ledSturts_Group[0].y = Set.setVal.Height - 1;
+            ledSturts_Group[1].y = Set.setVal.Height / 2;
+            ledSturts_Group[1].dir = 1;
+
+        }
+        if (jieduan == 3)
+        {
+            for (int i = 2; i < Set.setVal.Width - 2; i++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    picId = i + (Set.setVal.Height / 4 - 1 + k) * Set.setVal.Width;
+                    pointId = Framebuffer.tab_Mapping[picId];
+
+                    GameLedControl.gamePoint[pointId].statue = enPointSta.Die;
+                    picId = i + (Set.setVal.Height * 3 / 4 - 1 + k) * Set.setVal.Width;
+                    pointId = Framebuffer.tab_Mapping[picId];
+
+                    GameLedControl.gamePoint[pointId].statue = enPointSta.Die;
+
+                }
+            }
+            for (int i = 0; i < Set.setVal.Height; i++)
+            {
+
+                picId = Set.setVal.Width / 4 + i * Set.setVal.Width;
+                pointId = Framebuffer.tab_Mapping[picId];
+                GameLedControl.gamePoint[pointId].statue = enPointSta.Die;
+                picId = Set.setVal.Width * 3 / 4 + i * Set.setVal.Width;
+                pointId = Framebuffer.tab_Mapping[picId];
+                GameLedControl.gamePoint[pointId].statue = enPointSta.Die;
+            }
+        }
+
     }
     public Vector2 GetSafePlace(int i)
     {

@@ -27,57 +27,19 @@ namespace Game_LaserTouch
         {
             touchArea1 = new TouchArea(4,0,60);
         }
-        /// <summary>
-        /// 更新信号输入列表
-        /// 将新的信号输入数据更新到成员变量中，确保信号不会丢失
-        /// </summary>
-        /// <param name="newSignalsInput">新的信号输入列表</param>
-        public void UpdateSignalsInput(List<int> newSignalsInput)
+        public void UpdateSignalsInput(List<int> signalsInput)
         {
-            // 检查输入参数是否有效
-            if (newSignalsInput == null)
+            signalsInput.Clear();
+            for (int i = 0; i < signalsInput.Count; i++)
             {
-                Debug.LogWarning("UpdateSignalsInput: 输入参数为null，忽略更新");
-                return;
-            }
-
-            // 如果新输入为空列表，清空成员变量列表
-            if (newSignalsInput.Count == 0)
-            {
-                this.signalsInput.Clear();
-                return;
-            }
-
-            // 确保成员变量列表有足够的容量（预分配空间以提高性能）
-            if (this.signalsInput.Capacity < newSignalsInput.Count)
-            {
-                this.signalsInput.Capacity = newSignalsInput.Count;
-            }
-
-            // 调整列表大小以匹配新输入的长度
-            int currentCount = this.signalsInput.Count;
-            int newCount = newSignalsInput.Count;
-
-            if (currentCount < newCount)
-            {
-                // 扩展列表：添加缺失的元素
-                int addCount = newCount - currentCount;
-                for (int i = 0; i < addCount; i++)
+                if (signalsInput[i] == 1)
                 {
-                    this.signalsInput.Add(0);
+                    signalsInput[i] = 0;
                 }
-            }
-            else if (currentCount > newCount)
-            {
-                // 截断列表：移除多余的元素
-                this.signalsInput.RemoveRange(newCount, currentCount - newCount);
-            }
-
-            // 更新信号值：将新输入的值复制到成员变量中
-            // 使用索引访问确保所有信号都被正确更新，不会丢失
-            for (int i = 0; i < newCount; i++)
-            {
-                this.signalsInput[i] = newSignalsInput[i];
+                else
+                {
+                    signalsInput[i] = 1;
+                }
             }
         }
     }

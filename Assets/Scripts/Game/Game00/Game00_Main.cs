@@ -1,15 +1,10 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-// 脚本综述：Game00 的主控制脚本，负责流程状态机驱动、关卡/阶段切换、计分与生命管理，
-// 并与墙灯硬件、LED 面板和 UI 进行交互，供玩法逻辑与外设联动。
 
-/// <summary>
-/// 游戏主流程状态定义（UI/流程/结果等）。
-/// </summary>
 public enum en_Game00_Sta
 {
     None = 0,
@@ -32,9 +27,6 @@ public enum en_Game00_Sta
     OutEnd,
 }
 
-/// <summary>
-/// IO/外设层面的游戏状态（用于硬件或通信同步）。
-/// </summary>
 public enum en_IoGameSta
 {
     None = 0,
@@ -46,11 +38,7 @@ public enum en_IoGameSta
     GameOver,
 }
 
-/// <summary>
-/// Game00 主逻辑控制器，负责状态机、计分、墙灯交互与 UI 驱动。
-/// 实现 ISettingInGameTarget 供 SettingInGame 解耦调用。
-/// </summary>
-public class Game00_Main : MonoBehaviour, ISettingInGameTarget
+public class Game00_Main : MonoBehaviour
 {
     public Game00_GameUIComm gameUIComm;
     public Game00_GameUI gameUI_Single;
@@ -83,7 +71,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
     float sendTime;
 
     int bgmIndex = 0;
-    public int gameId = 56; // TODO: 建议提取为常量（游戏编号，用于通信/统计）
+    public int gameId = 56;
     public int setIndex;
     public int setCount;
     bool cmdRetSucess;
@@ -107,11 +95,11 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
     RankOne rankOne;
 
     public en_IoGameSta gameStatue; // 0
-    const byte WALL_LED_OPEN = 0x01; // [硬件交互] 墙灯开启指令（假定 0x01 表示开启）
-    public int Index_JieDuan = 0; // 阶段 (Stage) 索引
-    float maxremainTime = 60; // TODO: 建议提取为常量（单阶段最大时间）
+    const byte WALL_LED_OPEN = 0x01;
+    public int Index_JieDuan = 0;
+    float maxremainTime = 60;
     public bool isClearTarage = true;//是按照时间还是按照,清空地图上所有的目标点来进入下一个阶段
-    public int Score_LinShi = 0; // 临时分数 (Temporary Score)
+    public int Score_LinShi = 0;
 #if UNITY_EDITOR
     //void Start()
     //{
@@ -121,10 +109,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
     //}
 #endif
     public AudioClip[] audioClip_321;
-    /// <summary>
-    /// 播放 3/2/1 倒计时语音提示。
-    /// </summary>
-    /// <param name="time">当前倒计时数值（建议 3/2/1）。</param>
     public void PlayCountDown(int time)
     {
         audioSource_Others.Stop();
@@ -133,54 +117,19 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 
     }
     public static Game00_Main instance;
-    /// <summary>
-    /// 供外部初始化调用，绑定 Main 引用并预初始化 UI。
-    /// </summary>
-    /// <param name="mainn">主流程控制器。</param>
     public void Awake0(Main mainn)
     {
         instance = this;
         main = mainn;
         isClearTarage = true;
         gameUI_MulitPlayer.Awake0();
-        SettingInGameRegistry.CurrentTarget = this;
-    }
-    void OnDisable()
-    {
-        if (SettingInGameRegistry.CurrentTarget == (ISettingInGameTarget)this)
-            SettingInGameRegistry.CurrentTarget = null;
-    }
-    public GameObject PresetPicLayerParent => presetPic_Layer != null ? presetPic_Layer.transform.parent.gameObject : null;
-    public void OnSettingNextLevel()
-    {
-        if (Main.MapIndex == 7)
-        {
-            Game14_Main.instance.OnClickNextLevel();
-            return;
-        }
-        Game_Map00.instance.TarageNum_now = 0;
-        if (Main.MapID == 25)
-            Game_Map00.instance.Init_NewMap_01_next();
-        else if (Main.MapID == 1)
-            Game_Map00.instance.Init_NewMap_02_Next();
-        else
-            Game_Map00.instance.isClearAll = true;
-    }
-    public void TogglePresetPicShow()
-    {
-        if (presetPic_Layer == null) return;
-        var go = presetPic_Layer.transform.parent.gameObject;
-        go.SetActive(!go.activeSelf);
-        presetPic_Layer.transform.localRotation = Quaternion.identity;
+
     }
 
     readonly int[] tab_PlayerId_Left = { 0, 1 };
     readonly int[] tab_PlayerId_Right = { 1, 0 };
     // Use this for initialization
 
-    /// <summary>
-    /// 游戏开始入口：初始化 UI/玩家/统计/外设并进入流程状态机。
-    /// </summary>
     public void GameStart()
     {
         //        Texture2D texture2D = BackgPicManager.LoadLoaclPic_Game();
@@ -255,11 +204,11 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         {
             player[i].Ready();
         }
-        maxLevel = 8;// TODO: 建议提取为常量（最大关卡数）
+        maxLevel = 8;// Mathf.Min (Main.gameSetting.maxLevel, Main.gameSetting.gameLevelSetting.Length);
         gameLevel = Main.MapID;
 
 
-        IO.WallLED_All(0); // [硬件交互] 关闭全部墙灯，准备进入展示流程
+        IO.WallLED_All(0);
         ChangeStatue(en_Game00_Sta.ShowLevel);
         if (Main.IsDemo)
         {
@@ -268,11 +217,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         }
     }
 
-    /// <summary>
-    /// 简易计时器：累计到指定间隔后返回 true 并重置。
-    /// </summary>
-    /// <param name="passTime">间隔秒数。</param>
-    /// <returns>是否达到间隔。</returns>
     bool TimePassed(float passTime)
     {
         if (runTime > 0)
@@ -287,9 +231,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         return false;
     }
 
-    /// <summary>
-    /// 每帧驱动状态机与输入处理。
-    /// </summary>
+    // Update is called once per frame
     void Update()
     {
   
@@ -310,7 +252,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         switch (statue)
         {
             case en_Game00_Sta.ShowLevel:
-                // 状态流转：展示关卡 1.5 秒后进入提示阶段
                 runTime += Time.deltaTime;
                 if (runTime >= 1.5f)
                 {
@@ -325,7 +266,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.Tips:
-                // 状态流转：提示停留 2 秒后进入 Ready
                 runTime += Time.deltaTime;
                 if (runTime >= 2f)
                 {
@@ -335,7 +275,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.Ready:
-                // 状态流转：倒计时归零后进入 Play
+
                 if (runTime > 0)
                 {
                     runTime -= Time.deltaTime;
@@ -366,7 +306,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.Play:
-                // 主玩法循环：处理踩点、时间与阶段切换
                 CheckLedKey();
 
 
@@ -422,7 +361,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 }
                 if (Game97_PlayerModeSel.selectId == (int)en_PlayerMode.Free && Set.setVal.WallLedNum > 0)
                 {
-                    // 自由模式下墙灯玩法：检测击中与刷新墙灯
                     CheckWallLedButton();
                     if (wallLedNum != FjData.g_Fj[0].RemainWallLed)
                     {
@@ -440,7 +378,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                         }
                         else
                         {
-                            freshWallLedTime = 1f; // TODO: 建议提取为常量（墙灯刷新间隔）
+                            freshWallLedTime = 1f;
                             FreshWallLed();
                         }
                     }
@@ -451,7 +389,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                     runTime += Time.deltaTime;
                     if (runTime >= 0.5f)
                     {
-                        // 状态流转：生命耗尽后进入续关/结算流程
                         //result = 1;
                         if (Main.IsDemo)
                         {
@@ -476,7 +413,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 //
                 if (Index_JieDuan >= Game_Map00.instance.MaxJieDuan  )
                 {
-                    // 状态流转：阶段完成，进入结算
                     ChangeStatue(en_Game00_Sta.ShowResult);
 
                     break;
@@ -561,7 +497,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.WaitContinue:
-                // 状态流转：等待续关输入/倒计时结束进入结算或续关
                 {
                     if (runTime > 0)
                     {
@@ -588,13 +523,13 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 }
                 if (continueResult == 2 || runTime <= 0)// ||
                 {
-                    // 状态流转：续关失败/超时进入结算
+
                     ChangeStatue(en_Game00_Sta.ShowResult);
                 }
                 break;
 
             case en_Game00_Sta.Continue:
-                // 状态流转：确认续关后回到 Ready
+                // 确认收到后跳转
                 FjData.g_Fj[0].Life = SettingInGame_01.instance.GetLifeNum();
                 ChangeStatue(en_Game00_Sta.Ready);
                 if (cmdRetSucess)
@@ -605,7 +540,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.ShowResult:
-                // 状态流转：结算展示后进入计分或下一局
                 if (sendTime > 0)
                 {
                     sendTime -= Time.deltaTime;
@@ -656,7 +590,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.ShowResultScore:
-                // 状态流转：加分动画完成后进入胜者展示/排名/结束
                 if (AllPlayerAddScoreFinish() == false)
                     break;
                 if (runTime > 0)
@@ -713,7 +646,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.ShowWiner:
-                // 状态流转：胜者展示结束后退出
                 runTime += Time.deltaTime;
                 if (runTime >= 8)
                 {
@@ -722,14 +654,12 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.InputName:
-                // 状态流转：等待输入结束后进入排行榜
                 if (gameUIComm.playerNameInput.gameObject.activeSelf)
                     break;
                 ChangeStatue(en_Game00_Sta.RankList);
                 break;
 
             case en_Game00_Sta.RankList:
-                // 状态流转：排行榜展示结束后退出
                 runTime += Time.deltaTime;
                 if (runTime >= 8)
                 {
@@ -738,7 +668,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.End:
-                // 状态流转：短暂延迟后退出
                 runTime += Time.deltaTime;
                 if (runTime >= 1)
                 {
@@ -748,7 +677,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 
 
             case en_Game00_Sta.Out:
-                // 状态流转：回到总流程或切换到下个游戏
+
                 runTime += Time.deltaTime;
                 if (runTime >= 0.3f)
                 {
@@ -763,10 +692,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         }
     }
 
-    /// <summary>
-    /// 切换主流程状态，并重置临时计时/计数。
-    /// </summary>
-    /// <param name="sta">目标状态。</param>
     public void ChangeStatue(en_Game00_Sta sta)
     {
 #if UNITY_EDITOR
@@ -799,7 +724,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         {
 
             case en_Game00_Sta.Idle:
-                // 进入空闲：隐藏 UI，玩家回到 Idle
                 presetPic_Layer.transform.parent.gameObject.SetActive(false);
                 float sX, sY;
 
@@ -814,7 +738,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.Tips:
-                // 进入提示：仅展示提示 UI
+
                 //  Update_CurrPresetPic();
 
                 break;
@@ -822,7 +746,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 
 
             case en_Game00_Sta.ShowLevel:
-                // 进入关卡展示：初始化生命/墙灯/剩余点数
                 gameUI.time_Obj_All.SetActive(false);
                 SettingInGame_01.instance.GGstart();
 
@@ -833,7 +756,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 gameUIComm.Update_ShowLevel(gameLevel);
                 if (Game97_PlayerModeSel.selectId == (int)en_PlayerMode.Free && Set.setVal.WallLedNum > 0)
                 {
-                    IO.WallLED_All(0);// [硬件交互] 关闭墙灯，等待重新分配
+                    IO.WallLED_All(0);//WALL_LED_OPEN
                 }
                 //
                 if (Game97_PlayerModeSel.selectId == (int)en_PlayerMode.Free && Set.setVal.WallLedNum > 0)
@@ -851,14 +774,14 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 {
                     FjData.g_Fj[i].Life = maxLife;// SettingInGame_01.instance.set_LifeNum;
 
-                    FjData.g_Fj[i].RemainPoint = 5000; // TODO: 建议提取为常量（初始剩余目标点数）
+                    FjData.g_Fj[i].RemainPoint = 5000;
                     FjData.g_Fj[i].TargetPoint = FjData.g_Fj[i].RemainPoint;
                     FjData.g_Fj[i].RemainWallLed = wallLedNum;
                 }
                 Update_WallLedNum();
                 if (Main.IsDemo)
                 {
-                    gameTime = 120; // TODO: 建议提取为常量（演示模式总时长）
+                    gameTime = 120;
                 }
                 else
                 {
@@ -878,7 +801,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.Ready:
-                // 进入准备：倒计时、重置阶段与初始化 LED 图案
+
                 if (continueResult == 1)
                 {
 
@@ -915,7 +838,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 //     presetPic_Layer.transform.localScale = new Vector3(sX, sY, 0);
 
                 //gameUI.time_Obj.SetActive (true);
-                runTime = 4; // TODO: 建议提取为常量（准备阶段总时长）
+                runTime = 4;
                 readyTime = 3;
 
                 gameUIComm.Update_ReadyTime(readyTime);
@@ -926,12 +849,11 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 PlaySound(audioClip_ReadyTime);
                 if (Game97_PlayerModeSel.selectId == (int)en_PlayerMode.Free && Set.setVal.WallLedNum > 0)
                 {
-                    IO.WallLED_All(0);// [硬件交互] 关闭墙灯，准备重新点亮
+                    IO.WallLED_All(0);//WALL_LED_OPEN
                 }
                 break;
 
             case en_Game00_Sta.Play:
-                // 进入玩法：显示时间/阶段 UI 并开始播放图案
                 gameUIComm.level_Obj.SetActive(true);
                 if (Set.setVal.Height > Set.setVal.Width)
                 {
@@ -954,7 +876,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 gameUI.Update_RemainTime_JieDuan((int)remainTime);
                 if (Game97_PlayerModeSel.selectId == (int)en_PlayerMode.Free && Set.setVal.WallLedNum > 0)
                 {
-                    IO.WallLED_All(0);// [硬件交互] 清空墙灯，稍后刷新
+                    IO.WallLED_All(0);//WALL_LED_OPEN
                 }
                 freshWallLedTime = 0;
 
@@ -1004,30 +926,29 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.WaitContinue:
-                // 进入续关等待：展示提示并设置倒计时
-                runTime = 10f; // TODO: 建议提取为常量（续关等待时长）
+                runTime = 10f;
                 continueResult = 0;
                 gameUIComm.continueGame_Obj.SetActive(true);
-                GameLedControl.playerControl[0].ShowColorFull(0xff0000, enPointSta.Die); // [硬件交互] 全屏红色提示（0xff0000）
+                GameLedControl.playerControl[0].ShowColorFull(0xff0000, enPointSta.Die);
                 if (Main.IsDemo)
                 {
                     continueResult = 2;
                 }
                 break;
             case en_Game00_Sta.Continue:
-                // 续关确认：等待外部确认后由 Update 跳转
+
                 gameUIComm.continueGame_Obj.SetActive(true);
                 break;
 
             case en_Game00_Sta.ShowResult:
-                // 进入结算：清理 UI/外设并播放结果音效
-                GameLedControl.playerControl[0].ShowColorFull(0, enPointSta.None); // [硬件交互] 清空面板显示
+
+                GameLedControl.playerControl[0].ShowColorFull(0, enPointSta.None);
                 gameUIComm.level_Obj.SetActive(false);
                 gameUI.time_Obj_All.SetActive(false);
                 gameUI.time_Obj_JieDuan.SetActive(false);
                 if (Game97_PlayerModeSel.selectId == (int)en_PlayerMode.Free && Set.setVal.WallLedNum > 0)
                 {
-                    IO.WallLED_All(0); // [硬件交互] 关闭全部墙灯
+                    IO.WallLED_All(0);
                 }
                 if (FjData.g_Fj[0].Life > 0)
                 {
@@ -1066,7 +987,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.ShowResultScore:
-                // 展示结算加分动画
                 gameUIComm.wallLedNum_Obj.SetActive(false);
                 for (int i = 0; i < playerNum && i < player.Length; i++)
                 {
@@ -1083,7 +1003,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.ShowWiner:
-                // 判断胜负并更新 UI 展示
                 if (player[0].result == player[1].result)
                 {
                     if (FjData.g_Fj[0].Scores > FjData.g_Fj[1].Scores)
@@ -1121,13 +1040,11 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
 
             case en_Game00_Sta.InputName:
-                // 输入名字：用于排行记录
                 gameUIComm.playerNameInput.gameObject.SetActive(true);
                 gameUIComm.playerNameInput.GameStart(6, null);
                 break;
 
             case en_Game00_Sta.RankList:
-                // 展示排行榜并写入记录
                 gameUIComm.rankList.gameObject.SetActive(true);
                 rankOne.playerName = gameUIComm.playerNameInput.GetName();
                 rankOne.score = FjData.g_Fj[0].Scores;
@@ -1148,9 +1065,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
     }
 
     // 墙灯：
-    /// <summary>
-    /// 检测墙灯按键触发并结算（自由模式）。
-    /// </summary>
     void CheckWallLedButton()
     {
         bool pressed = false;
@@ -1172,14 +1086,10 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                     pressed = false;
                     //    CmdIO_YDGZ.CMD0_SendCmd_GameStatue(gameId, gameLevel, (int)statue);
                 }
-                IO.WallLED_One(i, 0); // [硬件交互] 关闭单个墙灯
+                IO.WallLED_One(i, 0);
             }
         }
     }
-    /// <summary>
-    /// 获取当前仍点亮的墙灯数量。
-    /// </summary>
-    /// <returns>点亮墙灯数量。</returns>
     int CurrRemainWallLed()
     {
         int count = 0;
@@ -1193,12 +1103,9 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         return count;
     }
 
-    /// <summary>
-    /// 刷新随机墙灯，控制本轮可点击数量。
-    /// </summary>
     void FreshWallLed()
     {
-        int min = Set.setVal.WallLedNum / 4; // TODO: 建议提取为常量（每次刷新占比）
+        int min = Set.setVal.WallLedNum / 4;
         int freshNum = Mathf.Clamp(Random.Range(min, min + 2), 1, Set.setVal.WallLedNum);
         if (freshNum > Main.MAX_WALLLED)
             freshNum = Main.MAX_WALLLED;
@@ -1224,23 +1131,16 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                 break;
             }
             id = idBuf[Random.Range(0, len)];
-            IO.WallLED_One(id, WALL_LED_OPEN); // [硬件交互] 点亮随机墙灯
+            IO.WallLED_One(id, WALL_LED_OPEN);
             count++;
         }
     }
-    /// <summary>
-    /// 刷新墙灯剩余数量到 UI。
-    /// </summary>
     void Update_WallLedNum()
     {
         wallLedNum = FjData.g_Fj[0].RemainWallLed;
         gameUIComm.Update_WallLedNum(wallLedNum);
     }
 
-    /// <summary>
-    /// 播放单次提示音（会打断当前效果音）。
-    /// </summary>
-    /// <param name="audioClip">要播放的音效。</param>
     void PlaySound(AudioClip audioClip)
     {
         audioSource_Others.Stop();
@@ -1248,10 +1148,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         audioSource_Others.Play();
     }
 
-    /// <summary>
-    /// 通过 LED/玩家控制器展示准备倒计时数字。
-    /// </summary>
-    /// <param name="value">倒计时数字。</param>
     void ShowReadyTime(int value)
     {
 
@@ -1261,10 +1157,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         }
     }
 
-    /// <summary>
-    /// 是否存在玩家生命归零。
-    /// </summary>
-    /// <returns>任意玩家失败返回 true。</returns>
     bool HasPlayerLoss()
     {
         for (int i = 0; i < playerNum; i++)
@@ -1276,10 +1168,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         }
         return false;
     }
-    /// <summary>
-    /// 是否所有玩家都完成目标点/墙灯。
-    /// </summary>
-    /// <returns>所有玩家完成返回 true。</returns>
     bool AllPlayerPass()
     {
         for (int i = 0; i < playerNum; i++)
@@ -1291,10 +1179,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
         }
         return true;
     }
-    /// <summary>
-    /// 是否所有玩家的加分展示已完成。
-    /// </summary>
-    /// <returns>全部完成返回 true。</returns>
     bool AllPlayerAddScoreFinish()
     {
         for (int i = 0; i < playerNum; i++)
@@ -1308,13 +1192,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
     }
 
 
-    /// <summary>
-    /// 命中蓝色目标点，结算得分与剩余目标。
-    /// </summary>
-    /// <param name="no">玩家索引。</param>
-    /// <param name="x">LED 网格 X 坐标。</param>
-    /// <param name="y">LED 网格 Y 坐标。</param>
-    /// <returns>是否命中有效目标点。</returns>
     //踩中目标点
     public bool HitTargetPoint(int no, int x, int y)
     {
@@ -1330,7 +1207,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 
         }
         int picid = x + Set.setVal.Width * y;
-        int pointid = Framebuffer.tab_Mapping[picid]; // 坐标映射到硬件点位索引
+        int pointid = Framebuffer.tab_Mapping[picid];
         if (GameLedControl.gamePoint[pointid].tarageTime > 0)
         {
 
@@ -1350,13 +1227,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 
     }
     float errorCD = 1;
-    /// <summary>
-    /// 命中红色危险点（扣血/失败触发）。
-    /// </summary>
-    /// <param name="no">玩家索引。</param>
-    /// <param name="x">LED 网格 X 坐标。</param>
-    /// <param name="y">LED 网格 Y 坐标。</param>
-    /// <returns>是否命中危险点。</returns>
     // 踩中红点
     public bool HitDiePoint(int no, int x, int y)
     {
@@ -1368,7 +1238,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 
 
 
-        // WARNING: 当前实现直接返回 true，后续 return false 不可达，可能导致红点判定异常。
         return true;
 
         return false;
@@ -1376,9 +1245,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
     void CheckMap()
     {
     }
-    /// <summary>
-    /// 扫描 LED 按键并处理踩点逻辑（目标/危险）。
-    /// </summary>
     void CheckLedKey()
     {
         if (Main.IsDemo) { return; }
@@ -1405,7 +1271,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
             for (y = 0; y < Set.setVal.Height; y++)
             {
                 id = x + Set.setVal.Width * y;
-                pointId = Framebuffer.tab_Mapping[id]; // 坐标映射到硬件点位索引
+                pointId = Framebuffer.tab_Mapping[id];
                 switch (Framebuffer.led[pointId].statue)
                 {
                     case enPointSta.None:
@@ -1472,7 +1338,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
                                         Score_LinShi = 0;
                                     }
 
-                                    errorCD = 1; // TODO: 建议提取为常量（受伤冷却）
+                                    errorCD = 1;
                                     MusicManager.instance.Play_Fails();
 
 
@@ -1515,7 +1381,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 
                             GameLedControl.gamePoint[pointId].statue = enPointSta.None;
 
-                            Framebuffer.Update_PointColor(pointId, 0, enPointSta.None); // [硬件交互] 同步硬件点位颜色
+                            Framebuffer.Update_PointColor(pointId, 0, enPointSta.None);
 
                             if (gameLevel == 20)
                             {
@@ -1545,10 +1411,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 
     }
     // -----------------------------------------------------------------------------
-    /// <summary>
-    /// 是否所有玩家已结束（回到 Idle）。
-    /// </summary>
-    /// <returns>全部结束返回 true。</returns>
     bool IsAllPlayerEnd()
     {
         for (int i = 0; i < playerNum; i++)
@@ -1566,27 +1428,16 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
     int shakeCnt;
     float shakeTime;
     float shakePower;
-    /// <summary>
-    /// 开始震屏效果。
-    /// </summary>
-    /// <param name="power">震屏力度倍率。</param>
-    /// <param name="cnt">震屏次数。</param>
     public void ShakeStart(float power, int cnt)
     {
         shakePower = power;
         shakeCnt = cnt;
     }
-    /// <summary>
-    /// 立即停止震屏并归位。
-    /// </summary>
     public void ShakeStop()
     {
         shakeMain_Obj.transform.localPosition = new Vector3(0, 0, 0);
         shakeCnt = 0;
     }
-    /// <summary>
-    /// 震屏更新（需在 Update 中调用）。
-    /// </summary>
     public void ShakeRun()
     {
         if (shakeCnt > 0)
@@ -1625,9 +1476,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
     }
 #endif
     List<Image> list_PresetPic = new List<Image>();
-    /// <summary>
-    /// 初始化预览图层（根据面板尺寸动态生成小格子）。
-    /// </summary>
     void PresetPic_Init()
     {
         //while (list_PresetPic.Count>0)
@@ -1654,7 +1502,7 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
             Image image = Instantiate(picOne_Prefab, presetPic_Layer).GetComponent<Image>();
             list_PresetPic.Add(image);
         }
-        int widthOne = 10; // TODO: 建议提取为常量（预览格子默认像素）
+        int widthOne = 10;
         if (Set.setVal.Width > 0)
         {
             widthOne = 400 / Set.setVal.Width;
@@ -1694,10 +1542,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
 
 
     readonly Color[] tab_PointColor = { Color.black, Color.blue, Color.red, Color.green };
-    /// <summary>
-    /// 依据硬件缓存数据刷新预览图。
-    /// </summary>
-    /// <param name="dataBuf">预览数据缓存。</param>
     void Update_PresetPic(byte[] dataBuf)
     {
         if (dataBuf == null)
@@ -1735,9 +1579,6 @@ public class Game00_Main : MonoBehaviour, ISettingInGameTarget
             }
         }
     }
-    /// <summary>
-    /// 进入下一阶段（JieDuan），重新随机玩法配置并启动。
-    /// </summary>
     public void NextJieDuan()
     {
         if (Main.IsDemo)

@@ -1,9 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>[Game07] 游戏地图控制器，实现 ILedMapCallback 供 LedAnim_Struts_07 解耦调用。</summary>
-public class Game_Map07 : MonoBehaviour, ILedMapCallback
+public class Game_Map07 : MonoBehaviour
 {
 
 
@@ -62,12 +61,6 @@ public class Game_Map07 : MonoBehaviour, ILedMapCallback
     int moveCnt;
     int runCnt;
     bool isLeiShe;//是否是镭射阶段
-    public void ChangeLed_Sta(int ZX, int ZY, enPointSta sta)
-    {
-        picId = ZX + Set.setVal.Width * ZY;
-        pointId = Framebuffer.tab_Mapping[picId];
-        GameLedControl.gamePoint[pointId].statue = sta;
-    }
     public void ChangeLed_Sta_Col(int ZX, int ZY, uint col, enPointSta sta)
     {
         picId = ZX + Set.setVal.Width * ZY;
@@ -294,7 +287,7 @@ public class Game_Map07 : MonoBehaviour, ILedMapCallback
         for (int i = 0; i < 2; i++)
         {
             ledSturts_Group[i].enabled = true;
-            ledSturts_Group[i].Init(i, this);
+            ledSturts_Group[i].Init(i);
             if (Game07_Main.instance.Index_JieDuan == 0)
             {
                 ledSturts_Group[i].GetTarage(0);
@@ -323,7 +316,7 @@ public class Game_Map07 : MonoBehaviour, ILedMapCallback
         for (int i = 0; i < 6; i++)
         {
             ledSturts_Group[i].enabled = true;
-            ledSturts_Group[i].Init(i, this);
+            ledSturts_Group[i].Init(i);
             //ledSturts_Group[i].GetPicType();
         }
         ledSturts_Group[0].GetPicType();
@@ -404,7 +397,7 @@ public class Game_Map07 : MonoBehaviour, ILedMapCallback
         for (int i = 0; i < 2; i++)
         {
             ledSturts_Group[i].enabled = true;
-            ledSturts_Group[i].Init(i, this);
+            ledSturts_Group[i].Init(i);
             ledSturts_Group[i].GetTatagePos();
         }
 
@@ -943,7 +936,7 @@ public class Game_Map07 : MonoBehaviour, ILedMapCallback
         for (int i = 0; i < 6; i++)
         {
             ledSturts_Group[i].enabled = true;
-            ledSturts_Group[i].Init(i, this);
+            ledSturts_Group[i].Init(i);
             //ledSturts_Group[i].GetPicType();
         }
         ledSturts_Group[0].GetPicType();
@@ -1031,7 +1024,7 @@ public class Game_Map07 : MonoBehaviour, ILedMapCallback
         for (int i = 0; i < 2; i++)
         {
             ledSturts_Group[i].enabled = true;
-            ledSturts_Group[i].Init(i, this);
+            ledSturts_Group[i].Init(i);
             ledSturts_Group[i].GetTarage_new09();
         }
         if (x + 1 < Set.setVal.Width - 1)

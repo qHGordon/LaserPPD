@@ -1,9 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>[Core] 墙灯地图控制器，实现 ILedMapCallback 供 LedAnim_Struts_Wall 解耦调用。</summary>
-public class Map_WallLED : MonoBehaviour, ILedMapCallback
+public class Map_WallLED : MonoBehaviour
 {
 
 

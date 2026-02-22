@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,10 +53,6 @@ public class Game01_Player : MonoBehaviour
     float errorCD = 1;
     public int maxJieDuan = 4;
     public int currJieDuan = 0;
-    /// <summary>当前轮次（0-indexed，共 maxRound 轮）</summary>
-    public int currRound = 0;
-    /// <summary>每关总轮次数</summary>
-    public int maxRound = 3;
     int targetNum;
     public void Awake0(Game01_Main gmain)
     {
@@ -70,7 +66,6 @@ public class Game01_Player : MonoBehaviour
     public void GameStart(int no)
     {
         currJieDuan = 0;
-        currRound = 0;
 
         Id = no;
         //
@@ -259,7 +254,6 @@ public class Game01_Player : MonoBehaviour
 
                 switch (currJieDuan)
                 {
-                    // 当前阶段：关卡.轮次.1 (PPD-1 踩墙灯目标拍击)
                     case 0:
                         UpdateLed(4);
                         ch = 4;
@@ -281,7 +275,6 @@ public class Game01_Player : MonoBehaviour
                             ChangeStatue(en_Player01Sta.WaitPass);
                         }
                         break;
-                    // 当前阶段：关卡.轮次.2 (激光闪避1，寻找终点按钮)
                     case 1:
                         targetKeyId = (Set.ChannelLength[0] + Set.ChannelLength[1] + Set.ChannelLength[2] + Set.ChannelLength[3] + Set.ChannelLength[4]) - 1;
                      //   RunLedAnim();
@@ -296,7 +289,6 @@ public class Game01_Player : MonoBehaviour
                             break;
                         }
                         break;
-                    // 当前阶段：关卡.轮次.3 (PPD-2 踩墙灯目标拍击)
                     case 2:
                         switch (Main.gameLevel)
                         {
@@ -327,7 +319,6 @@ public class Game01_Player : MonoBehaviour
                             ChangeStatue(en_Player01Sta.WaitPass);
                         }
                         break;
-                    // 当前阶段：X.Y.4 (激光闪避2，寻找终点按钮，完成后进入轮次判断)
                     case 3:
                         targetKeyId = (Set.ChannelLength[0] + Set.ChannelLength[1] + Set.ChannelLength[2] + Set.ChannelLength[3] + Set.ChannelLength[4]) - 2;
                     //    RunLedAnim();
@@ -335,9 +326,8 @@ public class Game01_Player : MonoBehaviour
                         {
                             MusicManager.instance.Play_Correct();
                             Game_Map01.instance.protectTime = 3;
-                            // 阶段4完成，currJieDuan++ = 4，统一走 WaitPass 触发轮次判断
-                            currJieDuan++;
-                            ChangeStatue(en_Player01Sta.WaitPass);
+                            currJieDuan = 0;
+                            ChangeStatue(en_Player01Sta.Pass);
                             break;
                         }
                         break;
@@ -381,28 +371,10 @@ public class Game01_Player : MonoBehaviour
                 {
                     if (currJieDuan >= maxJieDuan)
                     {
-                        // 当前轮次 4 个阶段全部完成，推进轮次
-                        currRound++;
-                        currJieDuan = 0;
-                        if (currRound >= maxRound)
-                        {
-                            // 【关卡.X.4】全部 maxRound 轮完成，通关进入下一关
-                            currRound = 0;
-                            ChangeStatue(en_Player01Sta.Pass);
-                        }
-                        else
-                        {
-                            // 【关卡.轮次.0】进入新轮次，重新加载本关的激光配置
-                            Game_Map01.instance.Initmap_ForRound(currRound);
-                            ledControl.LedInit(Main.gameSetting.gameLevelSetting[gameMain.gameLevel]);
-                            PlayStart();
-                        }
+                        ChangeStatue(en_Player01Sta.Pass);
                     }
                     else
                     {
-                        // 【关卡.轮次.阶段4】即将进入第二激光阶段，切换为 lasers_stage4 的激光配置
-                        if (currJieDuan == 3)
-                            Game_Map01.instance.Initmap_ForRound(currRound, isStage4: true);
                         ledControl.LedInit(Main.gameSetting.gameLevelSetting[gameMain.gameLevel]);
                         //FjData.g_Fj[Id].Life = Main.gameSetting.gameLevelSetting[gameMain.gameLevel].life;
                         PlayStart();
@@ -561,8 +533,13 @@ public class Game01_Player : MonoBehaviour
                 result = 0;
                 break;
             case en_Player01Sta.Pass:
-                // 轮次循环已由 currRound 在 WaitPass 中统一管理（3轮完成后才进入此状态）。
-                // 原 index_JieDuan < 2 的循环机制已被新轮次系统取代，此处直接执行通关结算。
+                if (Game01_Main.instance.index_JieDuan < 2)
+                {
+                    Game01_Main.instance.index_JieDuan++;
+                    MusicManager.instance.Play_Correct();
+                    ChangeStatue(en_Player01Sta.ReadyTargetLed);
+                    break;
+                }
                 FjData.g_Fj[Id].Result = 1;
                 result = 1;
                 if (playerUI != null)
@@ -575,7 +552,6 @@ public class Game01_Player : MonoBehaviour
                 MusicManager.instance.Play_Talk(1, 1.2f); // "恭喜过关"
                 FjData.g_Fj[Id].LevelTime = (int)gameMain.gameTime;
                 currJieDuan = 0;
-                currRound = 0;
                 break;
 
             case en_Player01Sta.Loss:

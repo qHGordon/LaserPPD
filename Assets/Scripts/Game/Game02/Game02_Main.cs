@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -37,8 +37,7 @@ using UnityEngine.UI;
 //    GameOver,
 //}
 
-/// <summary>Game02 主逻辑控制器，实现 ISettingInGameTarget 供 SettingInGame 解耦调用。</summary>
-public class Game02_Main : MonoBehaviour, ISettingInGameTarget
+public class Game02_Main : MonoBehaviour
 {
     public Game02_GameUIComm gameUIComm;
     public Game02_GameUI gameUI_Single;
@@ -125,25 +124,7 @@ public class Game02_Main : MonoBehaviour, ISettingInGameTarget
         main = mainn;
         isClearTarage = true;
         gameUI_MulitPlayer.Awake0();
-        SettingInGameRegistry.CurrentTarget = this;
-    }
-    void OnDisable()
-    {
-        if (SettingInGameRegistry.CurrentTarget == (ISettingInGameTarget)this)
-            SettingInGameRegistry.CurrentTarget = null;
-    }
-    public GameObject PresetPicLayerParent => presetPic_Layer != null ? presetPic_Layer.transform.parent.gameObject : null;
-    public void OnSettingNextLevel()
-    {
-        Game_Map02.instance.TarageNum_now = 0;
-        Game_Map02.instance.isClearAll = true;
-    }
-    public void TogglePresetPicShow()
-    {
-        if (presetPic_Layer == null) return;
-        var go = presetPic_Layer.transform.parent.gameObject;
-        go.SetActive(!go.activeSelf);
-        presetPic_Layer.transform.localRotation = Quaternion.identity;
+
     }
 
     readonly int[] tab_PlayerId_Left = { 0, 1 };

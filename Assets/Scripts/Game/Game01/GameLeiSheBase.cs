@@ -2,89 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 镭射游戏点结构体（已废弃，请使用统一的 GamePoint）
-/// 保留此类型定义仅用于向后兼容，实际使用 GamePoint
-/// </summary>
-[System.Obsolete("GameLeiShePoint 已废弃，请使用统一的 GamePoint 结构体")]
 public struct GameLeiShePoint
 {
-    // 内部使用 GamePoint 存储数据
-    private GamePoint point;
-
-    /// <summary>
-    /// 点的颜色（访问基础点的颜色）
-    /// </summary>
-    public uint color
-    {
-        get => point.color;
-        set => point.color = value;
-    }
-
-    /// <summary>
-    /// 点的状态（访问基础点的状态）
-    /// </summary>
-    public enPointSta statue
-    {
-        get => point.statue;
-        set => point.statue = value;
-    }
-
-    /// <summary>
-    /// 绑定计数（闪烁次数）
-    /// </summary>
-    public int bindCnt
-    {
-        get => point.bindCnt;
-        set => point.bindCnt = value;
-    }
-
-    /// <summary>
-    /// 绑定时间（闪烁间隔）
-    /// </summary>
-    public float bindTime
-    {
-        get => point.bindTime;
-        set => point.bindTime = value;
-    }
-
-    /// <summary>
-    /// 错误标志
-    /// </summary>
-    public bool error
-    {
-        get => point.error;
-        set => point.error = value;
-    }
-
-    /// <summary>
-    /// 默认构造函数
-    /// </summary>
-    public GameLeiShePoint(enPointSta statue, uint color, int bindCnt = 0, float bindTime = 0, bool error = false)
-    {
-        point = new GamePoint(statue, color, 0, 0, 0);
-        point.bindCnt = bindCnt;
-        point.bindTime = bindTime;
-        point.error = error;
-    }
-
-    /// <summary>
-    /// 隐式转换为 GamePoint
-    /// </summary>
-    public static implicit operator GamePoint(GameLeiShePoint leiShePoint)
-    {
-        return leiShePoint.point;
-    }
-
-    /// <summary>
-    /// 从 GamePoint 隐式转换
-    /// </summary>
-    public static implicit operator GameLeiShePoint(GamePoint point)
-    {
-        GameLeiShePoint result = new GameLeiShePoint(point.statue, point.color, point.bindCnt, point.bindTime, point.error);
-        result.point = point;
-        return result;
-    }
+    public uint color;
+    public enPointSta statue;
+    public int bindCnt;
+    public float bindTime;
+    public bool error;
 }
 
 public class GameLeiSheBase
@@ -162,10 +86,7 @@ public class GameLeiSheBase
 
     public const int MAX_LED_CH = 2;
 
-    /// <summary>
-    /// 游戏点数组（使用统一的 GamePoint 结构体）
-    /// </summary>
-    public static GamePoint[] gamePoint = new GamePoint[Main.MAX_LED_ONE * MAX_LED_CH];
+    public static GameLeiShePoint[] gamePoint = new GameLeiShePoint[Main.MAX_LED_ONE * MAX_LED_CH];
     public static int[] tab_Point = new int[500];
     //    {0,31,32,63,64,
     //                                1,30,33,62,65,
@@ -186,10 +107,7 @@ public class GameLeiSheBase
 
 
     //};
-    /// <summary>
-    /// 目标LED数组（使用统一的 GamePoint 结构体）
-    /// </summary>
-    public static GamePoint[] targetLed = new GamePoint[Main.MAX_LED_ONE];
+    public static GameLeiShePoint[] targetLed = new GameLeiShePoint[Main.MAX_LED_ONE];
 
     public static void Update_ColorFull(uint color, enPointSta sta)//镭射灯全部变颜色
     {
